@@ -1,0 +1,23 @@
+import React from 'react';
+import { Box, Typography } from '@mui/material';
+
+function Footer() {
+  return (
+    <Box
+      component="footer"
+      sx={{
+        py: 2,
+        px: 3,
+        mt: 'auto',
+        backgroundColor: (theme) => theme.palette.grey[200],
+        textAlign: 'center'
+      }}
+    >
+      <Typography variant="body2" color="text.secondary">
+      © 2025 SQL harjoittelutyökalu — Created by T. Räisänen
+      </Typography>
+    </Box>
+  );
+}
+
+export default Footer;
