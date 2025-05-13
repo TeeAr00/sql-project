@@ -7,7 +7,12 @@ import Footer from './Footer';
 import NavBar from './NavBar';
 import SideBar from './SideBar';
 import Questions from './Questions';
+import Profile from './Profile';
 
+
+function HomePage() {
+  return <div>Aula</div>;
+}
 
 function App() {
   return (
@@ -20,19 +25,13 @@ function App() {
           <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
             <Toolbar />
             <Routes>
-              <Route
-                path="/"
-                element={
-                  <Typography paragraph>
-                    Aula
-                  </Typography>
-                }
-              />
-              <Route path="/questions" element={<Questions />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/Questions" element={<Questions />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </Box>
-          <Footer />
         </Box>
+        <Footer />
       </Box>
     </Router>
   );
