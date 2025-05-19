@@ -1,6 +1,7 @@
 import React from 'react';
 import { CssBaseline, Box, Toolbar, Typography } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 //Komponentit
 import Footer from './Footer';
@@ -11,7 +12,25 @@ import Profile from './Profile';
 
 
 function HomePage() {
-  return <div>Aula</div>;
+  const [persons, setPersons] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/api/testRoute')
+      .then((res) => res.json())
+      .then((data) => setPersons(data))
+      .catch((err) => console.error('Error fetching persons:', err));
+  }, []);
+
+  return (
+    <div>
+      <h2>Aula</h2>
+      <ul>
+        {persons.map((person) => (
+          <li key={person.id}>{person.firstname}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 function App() {
