@@ -15,7 +15,7 @@ function HomePage() {
   const [persons, setPersons] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/testRoute')
+    fetch('http://localhost:5000/api/testRoute')
       .then((res) => res.json())
       .then((data) => setPersons(data))
       .catch((err) => console.error('Error fetching persons:', err));
