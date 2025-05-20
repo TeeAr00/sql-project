@@ -10,7 +10,7 @@ import SideBar from './SideBar';
 import Questions from './Questions';
 import Profile from './Profile';
 
-
+//databasen testausta varten tehty haku, posituu
 function HomePage() {
   const [persons, setPersons] = useState([]);
 
@@ -18,7 +18,7 @@ function HomePage() {
     fetch('http://localhost:5000/api/testRoute')
       .then((res) => res.json())
       .then((data) => setPersons(data))
-      .catch((err) => console.error('Error fetching persons:', err));
+      .catch((err) => console.error('Virhe haettaessa henkilöitä:', err));
   }, []);
 
   return (

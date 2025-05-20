@@ -15,6 +15,7 @@ const PORT = 5000;
 
 //routes
 const testRoute = require('./routes/testRoute')(db);
+const exercisesRouter = require('./routes/exercises')(db);
 
 
 const app = express();
@@ -22,6 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/testRoute', testRoute);
+app.use('/api/exercises', exercisesRouter);
 
 
 app.listen(PORT, () => {
