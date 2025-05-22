@@ -9,8 +9,9 @@ import NavBar from './NavBar';
 import SideBar from './SideBar';
 import Questions from './Questions';
 import Profile from './Profile';
+import Login from './Login';
 
-//databasen testausta varten tehty haku, posituu
+//databasen testausta varten tehty haku, poistuu
 function HomePage() {
   const [persons, setPersons] = useState([]);
 
@@ -45,8 +46,9 @@ function App() {
             <Toolbar />
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/Login" element={<Login />} />
               <Route path="/Questions" element={<Questions />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/Profile" element={<Profile />} />
             </Routes>
           </Box>
         </Box>
