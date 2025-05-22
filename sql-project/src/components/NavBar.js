@@ -30,6 +30,8 @@ function NavBar() {
             Profile
           </Button>
           <Button
+          component={Link}
+          to="/login"
             sx={{
               color: '#ffffff',
               '&:hover': {

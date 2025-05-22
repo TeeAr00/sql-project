@@ -15,7 +15,7 @@ const collapsedWidth = 60;
 function SideBar() {
   const location = useLocation();
   const menuItems = [
-    { text: 'Home', path: '/' },
+    { text: 'Home', path: '/Home' },
     { text: 'Questions', path: '/questions' },
   ];
 

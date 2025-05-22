@@ -9,7 +9,7 @@ function LoginPage() {
 
   const handleLogin = () => {
     // autentikointi tulee myöhemmin
-    navigate('/');
+    navigate('/Home');
   };
 
   return (
