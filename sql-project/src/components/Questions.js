@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Box, Button, TextField, Paper, CircularProgress } from '@mui/material';
 
-//Testauksen vuoksi tänne psukettu kaikki, myöhemmin laitetaan omiin osioihin.
-
 function Questions() {
+  const [setti, setSetti] = useState(null); // eri kysymysseteille
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedExercise, setSelectedExercise] = useState(null);
@@ -32,7 +31,6 @@ function Questions() {
     setFeedback(null);
     setUserQuery('');
     setShowHint(false);
-
     try {
       const res = await fetch(`http://localhost:5000/api/exercises/${exerciseId}`);
       const data = await res.json();
@@ -45,7 +43,6 @@ function Questions() {
   //  käyttäjän kysely bäkkärille tarkistettavaksi
   async function handleSubmit() {
     if (!userQuery.trim() || !selectedExercise) return;
-
     try {
       const res = await fetch(`http://localhost:5000/api/exercises/${selectedExercise.id}/evaluate`, {
         method: 'POST',
@@ -53,7 +50,6 @@ function Questions() {
         body: JSON.stringify({ query: userQuery }),
       });
       const data = await res.json();
-
       setFeedback(data.correct ? ' Oikein!' : ' Tarkista kyselysi');
     } catch (err) {
       console.error('Virhe tarkistuksessa:', err);
@@ -61,10 +57,39 @@ function Questions() {
     }
   }
 
+  if (!setti) {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 5 }}>
+        <Typography variant="h4" gutterBottom>
+          Main Menu
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+          <Button variant="contained" size="large" onClick={() => setSetti('setti1')}>
+            Question Set 1
+          </Button>
+          <Button variant="contained" size="large" onClick={() => setSetti('setti2')}>
+            Question Set 2
+          </Button>
+        </Box>
+      </Box>
+    );
+  }
+
+  if (setti === 'setti2') {
+    return (
+      <Box sx={{ textAlign: 'center', mt: 5 }}>
+        <Typography variant="h5">Setti 2</Typography>
+        <Button sx={{ mt: 3 }} onClick={() => setSetti(null)}>
+          &larr; Takaisin päävalikkoon
+        </Button>
+      </Box>
+    );
+  }
+
+  // Setti 1 helpot SELECT kysymykset
   if (loading) return <CircularProgress sx={{ mt: 5, display: 'block', mx: 'auto' }} />;
 
   if (!selectedExercise) {
-    // Näytä lista harjoituksista
     return (
       <Box sx={{ textAlign: 'center', mt: 5 }}>
         <Typography variant="h4" gutterBottom>
@@ -84,6 +109,10 @@ function Questions() {
             </Button>
           ))}
         </Box>
+
+        <Button sx={{ mt: 4 }} onClick={() => setSetti(null)}>
+          &larr; Takaisin päävalikkoon
+        </Button>
       </Box>
     );
   }
@@ -136,4 +165,5 @@ function Questions() {
     </Box>
   );
 }
+
 export default Questions;
