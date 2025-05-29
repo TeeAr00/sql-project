@@ -11,6 +11,7 @@ import Questions from './Questions';
 import Profile from './Profile';
 import Login from './Login';
 
+//Databasen testaukseen
 function HomePage() {
   const [persons, setPersons] = useState([]);
 

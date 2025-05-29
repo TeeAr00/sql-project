@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Box, Button, TextField, Paper, CircularProgress } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
+
+import er_diagram from '../assets/er_diagrammi.png';
 
 function Questions() {
   const [setti, setSetti] = useState(null); // eri kysymysseteille
@@ -9,6 +14,7 @@ function Questions() {
   const [userQuery, setUserQuery] = useState('');
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const [showImage, setShowImage] = useState(false);
 
   // Hae harjoitukset bäkkäristä
   useEffect(() => {
@@ -142,6 +148,10 @@ function Questions() {
           {showHint ? 'Piilota vinkki' : 'Näytä vinkki'}
         </Button>
 
+        <Button variant="outlined" onClick={() => setShowImage((prev) => !prev)}>
+          {showImage ? 'Piilota er-kaavio' : 'Näytä er-kaavio'}
+        </Button>
+
         <Button variant="contained" color="primary" onClick={handleSubmit} disabled={!userQuery.trim()}>
           Tarkista
         </Button>
@@ -152,6 +162,34 @@ function Questions() {
           {selectedExercise.expected_query}
         </Paper>
       )}
+
+      <Dialog open={showImage} onClose={() => setShowImage(false)} maxWidth="sm" fullWidth>
+        <DialogTitle sx={{ m: 0, p: 2 }}>
+          ER-Kaavio
+          <IconButton
+            aria-label="close"
+            onClick={() => setShowImage(false)}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <img
+              src={er_diagram}
+              alt="ER-diagrammi"
+              style={{ maxWidth: '100%', height: 'auto', borderRadius: '12px' }}
+            />
+          </Box>
+        </DialogContent>
+      </Dialog>
+
 
       {feedback && (
         <Typography sx={{ mt: 3, fontWeight: 'bold' }}>
