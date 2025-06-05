@@ -9,10 +9,10 @@ function isSelectQuery(query) {
 }
 
 module.exports = (db) => {
-  // Hae kaikki tehtävät (vain id ja description)
+  // haetaan kaikki tehtävät joista palautetaan id ja kuvaus
   router.get('/', async (req, res) => {
     try {
-      const [rows] = await db.promise().query('SELECT id, description FROM exercises');
+      const [rows] = await db.promise().query('SELECT id, description, class FROM exercises');
       res.json(rows);
     } catch (err) {
       console.error('Error fetching exercises:', err);
@@ -20,7 +20,7 @@ module.exports = (db) => {
     }
   });
 
-  // Hae yksittäisen tehtävän tiedot (myös expected_query)
+  // Haetaan yksittäisen tehtävän tiedot 
   router.get('/:id', async (req, res) => {
     const exerciseId = req.params.id;
     try {
@@ -40,17 +40,17 @@ module.exports = (db) => {
     const exerciseId = req.params.id;
     const userQuery = req.body.query;
 
+
     if (!userQuery) {
       return res.status(400).json({ error: 'User query missing' });
     }
-
     if (!isSelectQuery(userQuery)) {
       return res.status(400).json({ error: 'Only SELECT queries are allowed' });
     }
 
     try {
-      // Hae odotettu kysely ja tarkasta siitä sen olevan SELECT
-      const [exerciseRows] = await db.promise().query('SELECT expected_query FROM exercises WHERE id = ?', [exerciseId]);
+      // Hae odotettu kysely
+      const [exerciseRows] = await db.promise().query('SELECT expected_query, class FROM exercises WHERE id = ?', [exerciseId]);
       if (exerciseRows.length === 0) {
         return res.status(404).json({ error: 'Exercise not found' });
       }

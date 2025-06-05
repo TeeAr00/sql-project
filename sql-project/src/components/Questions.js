@@ -4,9 +4,16 @@ import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { motion, AnimatePresence } from 'framer-motion';
 
-
-
 import er_diagram from '../assets/er_diagrammi.png';
+
+const classLabels = {
+  1: 'SELECT',
+  2: 'WHERE',
+  3: 'ORDER BY',
+  4: 'JOIN',
+  5: 'COUNT',
+  6: 'SUBQUERY'
+};
 
 function Questions() {
   const [setti, setSetti] = useState(null); // eri kysymysseteille
@@ -24,6 +31,7 @@ function Questions() {
       try {
         const res = await fetch('http://localhost:5000/api/exercises');
         const data = await res.json();
+        console.log('Fetched exercises:', data);//dbug
         setExercises(data);
       } catch (err) {
         console.error('Virhe haettaessa harjoituksia:', err);
@@ -108,7 +116,7 @@ function Questions() {
           {exercises.map((ex) => (
             <motion.div
               key={ex.id}
-              layoutId={`card-${ex.id}`} // Unique id for smooth shared transition
+              layoutId={`card-${ex.id}`}
               onClick={() => selectExercise(ex.id)}
               style={{ margin: 12 }}
               whileHover={{ scale: 1.05 }}
@@ -119,7 +127,7 @@ function Questions() {
                 size="large"
                 sx={{ px: 5, py: 2, minWidth: 150 }}
               >
-                {`Question ${ex.id}`}
+                {`Q${ex.id}: ${classLabels[+ex.class] || 'Other'}`}
               </Button>
             </motion.div>
           ))}
