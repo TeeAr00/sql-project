@@ -11,11 +11,18 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 });
+
+const db2 = mysql.createConnection({
+  host: process.env.DB_HOST2,
+  user: process.env.DB_USER2,
+  password: process.env.DB_PASSWORD2,
+  database: process.env.DB_NAME2,
+});
 const PORT = 5000;
 
 //routes
-const testRoute = require('./routes/testRoute')(db);
-const exercisesRouter = require('./routes/exercises')(db);
+const testRoute = require('./routes/testRoute')(db,db2);
+const exercisesRouter = require('./routes/exercises')(db,db2);
 
 
 const app = express();

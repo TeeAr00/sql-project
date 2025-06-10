@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-function LoginPage() {
+function Register() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // autentikointi tulee myöhemmin
-    navigate('/Home');
+  const handleRegister = () => {
+    // logiiikka myöhemmin
+    if (password !== confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    }
+    navigate('/Login');
   };
 
   return (
@@ -24,7 +30,7 @@ function LoginPage() {
     >
       <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: '#2c2c3e', color: '#fff' }}>
         <Typography variant="h5" sx={{ mb: 2 }}>
-          Login
+          Register
         </Typography>
         <TextField
           label="Username"
@@ -37,25 +43,43 @@ function LoginPage() {
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
+          label="Email"
+          variant="filled"
+          fullWidth
+          sx={{ mb: 2 }}
+          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
+          InputLabelProps={{ sx: { color: '#aaa' } }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
           label="Password"
+          type="password"
+          variant="filled"
+          fullWidth
+          sx={{ mb: 2 }}
+          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
+          InputLabelProps={{ sx: { color: '#aaa' } }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <TextField
+          label="Password again"
           type="password"
           variant="filled"
           fullWidth
           sx={{ mb: 3 }}
           InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
           InputLabelProps={{ sx: { color: '#aaa' } }}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Button variant="contained" fullWidth onClick={handleLogin}>
-          Login
-        </Button>
-        <Button variant="text" fullWidth onClick={() => navigate('/register')} sx={{ color: '#aaa' }}>
-          Sign up
+        <Button variant="contained" fullWidth onClick={handleRegister}>
+          Register
         </Button>
       </Paper>
     </Box>
   );
 }
 
-export default LoginPage;
+export default Register;

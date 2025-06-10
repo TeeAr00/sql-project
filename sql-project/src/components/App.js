@@ -10,6 +10,7 @@ import SideBar from './SideBar';
 import Questions from './Questions';
 import Profile from './Profile';
 import Login from './Login';
+import Register from './Register';
 
 //Databasen testaukseen
 function HomePage() {
@@ -62,6 +63,7 @@ function App() {
             <Navigate to="/login" replace />
           }
         />
+        <Route path="/register" element={<Register />} />
         <Route
           path="/questions"
           element={

@@ -102,7 +102,7 @@ function Questions() {
     );
   }
 
-  // Setti 1 helpot SELECT kysymykset
+  // Setti 1 helpot SELECT kysymykset, tällä hetkellä kaikki yhdessä
   if (loading) return <CircularProgress sx={{ mt: 5, display: 'block', mx: 'auto' }} />;
 
   if (!selectedExercise) {
