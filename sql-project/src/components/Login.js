@@ -7,10 +7,34 @@ function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    // autentikointi tulee myöhemmin
-    navigate('/Home');
-  };
+  const handleLogin = async () => {
+  try {
+    const response = await fetch('http://localhost:5000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!response.ok) {
+      if (response.status === 400) {
+          alert('Check your username and password');
+        } else {
+          alert('Login failed. Please try again.');
+        }
+      return;
+    }
+
+    const data = await response.json();
+
+    if (data.token) {
+      navigate('/Home');
+    } else {
+      console.error('No token received from login');
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+  }
+};
 
   return (
     <Box
@@ -47,11 +71,11 @@ function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button variant="contained" fullWidth onClick={handleLogin}>
+        <Button variant="contained" fullWidth onClick={handleLogin}sx={{ mb: 1 }}>
           Login
         </Button>
         <Button variant="text" fullWidth onClick={() => navigate('/register')} sx={{ color: '#aaa' }}>
-          Sign up
+          Register
         </Button>
       </Paper>
     </Box>

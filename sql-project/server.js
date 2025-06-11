@@ -23,6 +23,8 @@ const PORT = 5000;
 //routes
 const testRoute = require('./routes/testRoute')(db,db2);
 const exercisesRouter = require('./routes/exercises')(db,db2);
+const registerRouter = require('./routes/register')(db2);
+const loginRouter = require('./routes/login')(db2);
 
 
 const app = express();
@@ -31,6 +33,8 @@ app.use(express.json());
 
 app.use('/api/testRoute', testRoute);
 app.use('/api/exercises', exercisesRouter);
+app.use('/api/register', registerRouter);
+app.use('/api/login', loginRouter);
 
 
 app.listen(PORT, () => {

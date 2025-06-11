@@ -9,14 +9,36 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = () => {
-    // logiiikka myöhemmin
-    if (password !== confirmPassword) {
-      alert("Passwords don't match");
+  const handleRegister = async () => {
+  if (password !== confirmPassword) {
+    alert("Passwords don't match");
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:5000/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username,
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || 'Registration failed');
       return;
     }
-    navigate('/Login');
-  };
+
+    navigate('/');
+  } catch (error) {
+    console.error('Registration error:', error);
+    alert('Something went wrong during registration');
+  }
+};
 
   return (
     <Box
@@ -74,8 +96,11 @@ function Register() {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <Button variant="contained" fullWidth onClick={handleRegister}>
+        <Button variant="contained" fullWidth onClick={handleRegister}sx={{ mb: 1 }}>
           Register
+        </Button>
+        <Button variant="text" fullWidth onClick={() => navigate('/login')} sx={{ color: '#aaa' }}>
+          Login
         </Button>
       </Paper>
     </Box>
