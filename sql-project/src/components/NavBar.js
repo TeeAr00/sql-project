@@ -1,8 +1,14 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 function NavBar() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    navigate('/login');
+  };
   return (
     <AppBar
       position="fixed"
@@ -30,8 +36,7 @@ function NavBar() {
             Profile
           </Button>
           <Button
-          component={Link}
-          to="/login"
+            onClick={handleLogout}
             sx={{
               color: '#ffffff',
               '&:hover': {

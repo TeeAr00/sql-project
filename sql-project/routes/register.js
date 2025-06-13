@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 module.exports = (db2) => {
   const router = express.Router();
-  console.log('register kutsu lähti');
+  //console.log('register kutsu lähti');
   router.post('/', async (req, res) => {
     const { username, email, password } = req.body;
 

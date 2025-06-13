@@ -27,6 +27,7 @@ function LoginPage() {
     const data = await response.json();
 
     if (data.token) {
+      localStorage.setItem('authToken', data.token);
       navigate('/Home');
     } else {
       console.error('No token received from login');

@@ -11,6 +11,7 @@ import Questions from './Questions';
 import Profile from './Profile';
 import Login from './Login';
 import Register from './Register';
+import Auth from './Auth';
 
 //Databasen testaukseen
 function HomePage() {
@@ -57,35 +58,37 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
+
         <Route
-          path="/"
+          path="/home"
           element={
-            <Navigate to="/login" replace />
+            <Auth>
+              <MainLayout>
+                <HomePage />
+              </MainLayout>
+            </Auth>
           }
         />
-        <Route path="/register" element={<Register />} />
         <Route
           path="/questions"
           element={
-            <MainLayout>
-              <Questions />
-            </MainLayout>
+            <Auth>
+              <MainLayout>
+                <Questions />
+              </MainLayout>
+            </Auth>
           }
         />
         <Route
           path="/profile"
           element={
-            <MainLayout>
-              <Profile />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/home"
-          element={
-            <MainLayout>
-              <HomePage />
-            </MainLayout>
+            <Auth>
+              <MainLayout>
+                <Profile />
+              </MainLayout>
+            </Auth>
           }
         />
       </Routes>
