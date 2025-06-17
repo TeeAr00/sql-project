@@ -25,6 +25,7 @@ const testRoute = require('./routes/testRoute')(db,db2);
 const exercisesRouter = require('./routes/exercises')(db,db2);
 const registerRouter = require('./routes/register')(db2);
 const loginRouter = require('./routes/login')(db2);
+const profileRouter = require('./routes/profile')(db2);
 
 
 const app = express();
@@ -35,6 +36,7 @@ app.use('/api/testRoute', testRoute);
 app.use('/api/exercises', exercisesRouter);
 app.use('/api/register', registerRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/profile', profileRouter);
 
 
 app.listen(PORT, () => {
