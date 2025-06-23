@@ -16,7 +16,8 @@ const classLabels = {
 };
 
 function Questions() {
-  const [setti, setSetti] = useState(null); // eri kysymysseteille
+  const [testSets, setTestSets] = useState([]);
+  const [selectedTestSet, setSelectedTestSet] = useState(null);
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedExercise, setSelectedExercise] = useState(null);
@@ -26,12 +27,59 @@ function Questions() {
   const [showImage, setShowImage] = useState(false);
 
   // Hae harjoitukset bäkkäristä
+  // Vanha pelkällä idllä haku, uusi tehtävä settien perusteella
+  // useEffect(() => {
+  //   async function fetchExercises() {
+  //     try {
+  //       const res = await fetch('http://localhost:5000/api/exercises');
+  //       const data = await res.json();
+  //       console.log('Fetched exercises:', data);//dbug
+  //       setExercises(data);
+  //     } catch (err) {
+  //       console.error('Virhe haettaessa harjoituksia:', err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   fetchExercises();
+  // }, []);
+
   useEffect(() => {
+    async function fetchTestSets() {
+      try {
+        const res = await fetch('http://localhost:5000/api/exercises/test-sets');
+        const data = await res.json();
+        console.log('raw test-sets payload:', data);
+        setTestSets(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error('Failed to load test sets:', err);
+      }
+    }
+    fetchTestSets();
+  }, []);
+
+  // Hae valitun harjoituksen tiedot
+  // Vanha haku
+  // async function selectExercise(exerciseId) {
+  //   setFeedback(null);
+  //   setUserQuery('');
+  //   setShowHint(false);
+  //   try {
+  //     const res = await fetch(`http://localhost:5000/api/exercises/${exerciseId}`);
+  //     const data = await res.json();
+  //     setSelectedExercise(data);
+  //   } catch (err) {
+  //     console.error('Virhe haettaessa harjoitusta:', err);
+  //   }
+  // }
+
+  useEffect(() => {
+    if (!selectedTestSet) return;
+    setLoading(true);
     async function fetchExercises() {
       try {
-        const res = await fetch('http://localhost:5000/api/exercises');
+        const res = await fetch(`http://localhost:5000/api/exercises/test-sets/${selectedTestSet}`);
         const data = await res.json();
-        console.log('Fetched exercises:', data);//dbug
         setExercises(data);
       } catch (err) {
         console.error('Virhe haettaessa harjoituksia:', err);
@@ -40,17 +88,16 @@ function Questions() {
       }
     }
     fetchExercises();
-  }, []);
+  }, [selectedTestSet]);
 
-  // Hae valitun harjoituksen tiedot
-  async function selectExercise(exerciseId) {
-    setFeedback(null);
-    setUserQuery('');
-    setShowHint(false);
+  async function selectExercise(id) {
     try {
-      const res = await fetch(`http://localhost:5000/api/exercises/${exerciseId}`);
+      const res = await fetch(`http://localhost:5000/api/exercises/${id}`);
       const data = await res.json();
       setSelectedExercise(data);
+      setUserQuery('');
+      setFeedback(null);
+      setShowHint(false);
     } catch (err) {
       console.error('Virhe haettaessa harjoitusta:', err);
     }
@@ -73,77 +120,48 @@ function Questions() {
     }
   }
 
-  if (!setti) {
+  if (!selectedTestSet) {
     return (
-      <Box sx={{ textAlign: 'center', mt: 5 }}>
-        <Typography variant="h4" gutterBottom>
-          Main Menu
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
-          <Button variant="contained" size="large" onClick={() => setSetti('setti1')}>
-            Question Set 1
-          </Button>
-          <Button variant="contained" size="large" onClick={() => setSetti('setti2')}>
-            Question Set 2
-          </Button>
+      <Box sx={{ mt: 5, textAlign: 'center' }}>
+        <Typography variant="h4">Valitse kysymyssarja</Typography>
+        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', gap: 3, flexWrap: 'wrap' }}>
+          {testSets.map((set) => (
+            <Button key={set.id} variant="contained" onClick={() => setSelectedTestSet(set.id)}>
+              {set.name}
+            </Button>
+          ))}
         </Box>
       </Box>
     );
   }
 
-  if (setti === 'setti2') {
-    return (
-      <Box sx={{ textAlign: 'center', mt: 5 }}>
-        <Typography variant="h5">Setti 2</Typography>
-        <Button sx={{ mt: 3 }} onClick={() => setSetti(null)}>
-          &larr; Takaisin päävalikkoon
-        </Button>
-      </Box>
-    );
-  }
-
-  // Setti 1 helpot SELECT kysymykset, tällä hetkellä kaikki yhdessä
   if (loading) return <CircularProgress sx={{ mt: 5, display: 'block', mx: 'auto' }} />;
 
   if (!selectedExercise) {
     return (
-      <Box sx={{ textAlign: 'center', mt: 5 }}>
-        <Typography variant="h4" gutterBottom>
-          Exercises
-        </Typography>
-
+      <Box sx={{ mt: 5, textAlign: 'center' }}>
+        <Typography variant="h4">Harjoitukset</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, flexWrap: 'wrap', mt: 4 }}>
           {exercises.map((ex) => (
             <motion.div
               key={ex.id}
               layoutId={`card-${ex.id}`}
-              onClick={() => selectExercise(ex.id)}
-              style={{ margin: 12 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => selectExercise(ex.id)}
             >
-              <Button
-                variant="contained"
-                size="large"
-                sx={{ px: 5, py: 2, minWidth: 150 }}
-              >
-                {`Q${ex.id}: ${classLabels[+ex.class] || 'Other'}`}
+              <Button variant="contained" sx={{ px: 4, py: 2 }}>
+                {`Q${ex.id}: ${classLabels[ex.class] || 'Other'}`}
               </Button>
             </motion.div>
           ))}
-
         </Box>
-
-        <Button sx={{ mt: 4 }} onClick={() => setSetti(null)}>
-          &larr; Takaisin päävalikkoon
+        <Button sx={{ mt: 4 }} onClick={() => setSelectedTestSet(null)}>
+          &larr; Takaisin testivalikkoon
         </Button>
       </Box>
     );
   }
-
-  // Näytä valittu harjoitus ja siitää aukeaa lomake
-  
-  if (selectedExercise) {
   return (
     <AnimatePresence mode="wait">
     {selectedExercise && (
@@ -245,8 +263,6 @@ function Questions() {
       </motion.div>
     )}
   </AnimatePresence>  );
-}
-
 }
 
 export default Questions;

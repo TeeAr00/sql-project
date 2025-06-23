@@ -9,6 +9,58 @@ function isSelectQuery(query) {
 }
 
 module.exports = (db) => {
+
+  //staattiset siirretty ylös ennen synaamisia. Ilmeisesti ei hae tarkemipia hakuja, kun jo löydetty reitti.
+  router.post('/test-sets', async (req, res) => {
+  const { name, exerciseIds } = req.body;
+  if (!name || !Array.isArray(exerciseIds)) {
+    return res.status(400).json({ error: 'Invalid input' });
+  }
+
+  const conn = await db.promise().getConnection();
+  try {
+    await conn.beginTransaction();
+    const [result] = await conn.query('INSERT INTO test_sets (name) VALUES (?)', [name]);
+    const testSetId = result.insertId;
+
+    const values = exerciseIds.map(id => [testSetId, id]);
+    await conn.query('INSERT INTO test_set_exercises (test_set_id, exercise_id) VALUES ?', [values]);
+
+    await conn.commit();
+    res.json({ id: testSetId, name });
+  } catch (err) {
+    await conn.rollback();
+    console.error('Error creating test set:', err);
+    res.status(500).json({ error: 'Database error' });
+  } finally {
+    conn.release();
+  }
+  });
+
+  router.get('/test-sets', async (req, res) => {
+    //console.log('GET /api/exercises/test-sets hit');
+    try {
+      const [rows] = await db.promise().query('SELECT * FROM test_sets');
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: 'Database error' });
+    }
+  });
+
+  router.get('/test-sets/:id', async (req, res) => {
+    const testSetId = req.params.id;
+    try {
+      const [rows] = await db.promise().query(
+        `SELECT e.* FROM exercises e
+        JOIN test_set_exercises tse ON e.id = tse.exercise_id
+        WHERE tse.test_set_id = ?`, [testSetId]
+      );
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: 'Database error' });
+    }
+  });
+
   // haetaan kaikki tehtävät joista palautetaan id ja kuvaus
   router.get('/', async (req, res) => {
     try {
