@@ -12,6 +12,7 @@ import Profile from './Profile';
 import Login from './Login';
 import Register from './Register';
 import Auth from './Auth';
+import NewTests from './NewTests';
 
 //Databasen testaukseen
 function HomePage() {
@@ -87,6 +88,16 @@ function App() {
             <Auth>
               <MainLayout>
                 <Profile />
+              </MainLayout>
+            </Auth>
+          }
+        />
+        <Route
+          path="/newTests"
+          element={
+            <Auth>
+              <MainLayout>
+                <NewTests />
               </MainLayout>
             </Auth>
           }

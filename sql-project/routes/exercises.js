@@ -71,6 +71,25 @@ module.exports = (db) => {
       res.status(500).json({ error: 'Database error' });
     }
   });
+  router.post('/', async (req, res) => {
+    const { description, expected_query, hint, class: exerciseClass } = req.body;
+
+    if (!description || !expected_query || !exerciseClass) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    try {
+      const [result] = await db.promise().query(
+        'INSERT INTO exercises (description, expected_query, hint, class) VALUES (?, ?, ?, ?)',
+        [description, expected_query, hint || '', exerciseClass]
+      );
+
+      res.status(201).json({ id: result.insertId });
+    } catch (err) {
+      console.error('Error creating exercise:', err);
+      res.status(500).json({ error: 'Database error' });
+    }
+  });
 
   // Haetaan yksittäisen tehtävän tiedot 
   router.get('/:id', async (req, res) => {

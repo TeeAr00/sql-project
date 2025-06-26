@@ -1,0 +1,169 @@
+import React, { useState } from 'react';
+import {
+  Box, Typography, TextField, Button, Paper, MenuItem,
+} from '@mui/material';
+
+const classOptions = [
+  { value: 1, label: 'SELECT' },
+  { value: 2, label: 'WHERE' },
+  { value: 3, label: 'ORDER BY' },
+  { value: 4, label: 'JOIN' },
+  { value: 5, label: 'COUNT' },
+  { value: 6, label: 'SUBQUERY' }
+];
+
+function NewTests() {
+  const [testSetName, setTestSetName] = useState('');
+  const [exercises, setExercises] = useState([
+    { description: '', expected_query: '', hint: '', class: '' }
+  ]);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState('');
+
+  const handleExerciseChange = (index, field, value) => {
+    const updated = [...exercises];
+    updated[index][field] = value;
+    setExercises(updated);
+  };
+
+  const addExercise = () => {
+    setExercises([...exercises, { description: '', expected_query: '', hint: '', class: '' }]);
+  };
+
+  const removeExercise = (index) => {
+    setExercises(exercises.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async () => {
+    if (!testSetName.trim() || exercises.some(e => !e.description || !e.expected_query || !e.class)) {
+      setMessage('Täytä kaikki kentät ennen tallennusta');
+      return;
+    }
+
+    try {
+      setSaving(true);
+      const savedExerciseIds = [];
+
+      for (const ex of exercises) {
+        const res = await fetch('http://localhost:5000/api/exercises', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(ex)
+        });
+        const data = await res.json();
+        if (!data.id) throw new Error('Virhe tallennettaessa tehtävää');
+        savedExerciseIds.push(data.id);
+      }
+
+      // Step 2: Save the test set
+      const res = await fetch('http://localhost:5000/api/exercises/test-sets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: testSetName,
+          exerciseIds: savedExerciseIds
+        })
+      });
+      const result = await res.json();
+
+      if (result.id) {
+        setMessage(`Testisetti "${testSetName}" tallennettu onnistuneesti!`);
+        setTestSetName('');
+        setExercises([{ description: '', expected_query: '', hint: '', class: '' }]);
+      } else {
+        throw new Error('Tallennus epäonnistui');
+      }
+
+    } catch (err) {
+      console.error(err);
+      setMessage('Virhe tallennuksessa');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Box sx={{ p: 4 }}>
+      <Typography variant="h4" gutterBottom>Testisetin luonti</Typography>
+      <TextField
+        label="Testisetin nimi"
+        fullWidth
+        value={testSetName}
+        onChange={(e) => setTestSetName(e.target.value)}
+        sx={{ mb: 3 }}
+      />
+
+      {exercises.map((ex, index) => (
+        <Paper key={index} sx={{ mb: 3, p: 2 }}>
+          <Typography variant="h6">Tehtävä {index + 1}</Typography>
+          <TextField
+            label="Kuvaus"
+            fullWidth
+            multiline
+            rows={2}
+            sx={{ mt: 2 }}
+            value={ex.description}
+            onChange={(e) => handleExerciseChange(index, 'description', e.target.value)}
+          />
+          <TextField
+            label="Odotettu SQL-kysely"
+            fullWidth
+            multiline
+            rows={3}
+            sx={{ mt: 2 }}
+            value={ex.expected_query}
+            onChange={(e) => handleExerciseChange(index, 'expected_query', e.target.value)}
+          />
+          <TextField
+            label="Vinkki (valinnainen)"
+            fullWidth
+            sx={{ mt: 2 }}
+            value={ex.hint}
+            onChange={(e) => handleExerciseChange(index, 'hint', e.target.value)}
+          />
+          <TextField
+            label="Kategoria"
+            fullWidth
+            select
+            sx={{ mt: 2 }}
+            value={ex.class}
+            onChange={(e) => handleExerciseChange(index, 'class', e.target.value)}
+          >
+            {classOptions.map(option => (
+              <MenuItem key={option.value} value={option.value}>{option.label}</MenuItem>
+            ))}
+          </TextField>
+          {exercises.length > 1 && (
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={() => removeExercise(index)}
+              sx={{ mt: 2 }}
+            >
+              Poista tehtävä
+            </Button>
+          )}
+        </Paper>
+      ))}
+
+      <Button variant="outlined" onClick={addExercise}>Lisää tehtävä</Button>
+
+      <Box sx={{ mt: 3 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+          disabled={saving}
+        >
+          Tallenna testisetti
+        </Button>
+      </Box>
+
+      {message && (
+        <Typography sx={{ mt: 2 }} color="secondary">{message}</Typography>
+      )}
+    </Box>
+  );
+}
+
+export default NewTests;

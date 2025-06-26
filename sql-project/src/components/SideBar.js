@@ -17,6 +17,7 @@ function SideBar() {
   const menuItems = [
     { text: 'Home', path: '/Home' },
     { text: 'Questions', path: '/questions' },
+    { text: 'New Test', path: '/newTests' },
   ];
 
   return (
