@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, Button, Paper } from '@mui/material';
+import { useThemeToggle } from './ThemeContext';
 
 function Profile() {
   const [userData, setUserData] = useState({ username: '', email: '' });
@@ -13,6 +14,8 @@ function Profile() {
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+
+  const { mode, toggleTheme } = useThemeToggle();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -116,6 +119,17 @@ function Profile() {
 
   return (
     <Box sx={{ p: 4, maxWidth: 600, mx: 'auto' }}>
+      <Typography variant="h6" gutterBottom>
+        Dark/Light Theme
+      </Typography>
+      <Button
+        variant="outlined"
+        onClick={toggleTheme}
+        sx={{ mb: 3 }}
+      >
+        Switch to {mode === 'light' ? 'Dark' : 'Light'} Mode
+      </Button>
+
       <Typography variant="h4" gutterBottom>
         Profile
       </Typography>
