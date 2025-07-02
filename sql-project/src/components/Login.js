@@ -44,10 +44,10 @@ function LoginPage() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        bgcolor: '#1e1e2f',
+        bgcolor: 'background.default',
       }}
     >
-      <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: '#2c2c3e', color: '#fff' }}>
+      <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: 'background.default', color: '#fff' }}>
         <Typography variant="h5" sx={{ mb: 2 }}>
           Login
         </Typography>
@@ -56,7 +56,7 @@ function LoginPage() {
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
+          InputProps={{ sx: { bgcolor: 'background.default', color: '#fff' } }}
           InputLabelProps={{ sx: { color: '#aaa' } }}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
@@ -67,15 +67,15 @@ function LoginPage() {
           variant="filled"
           fullWidth
           sx={{ mb: 3 }}
-          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
-          InputLabelProps={{ sx: { color: '#aaa' } }}
+          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
+          InputLabelProps={{ sx: { color: 'text.primary' } }}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button variant="contained" fullWidth onClick={handleLogin}sx={{ mb: 1 }}>
           Login
         </Button>
-        <Button variant="text" fullWidth onClick={() => navigate('/register')} sx={{ color: '#aaa' }}>
+        <Button variant="text" fullWidth onClick={() => navigate('/register')} sx={{ color: 'text.primary' }}>
           Register
         </Button>
       </Paper>

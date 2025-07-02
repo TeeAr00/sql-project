@@ -217,7 +217,7 @@ function Questions() {
         </Box>
 
         {showHint && (
-          <Paper sx={{ mt: 2, p: 2, bgcolor: '#f0f0f0', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+          <Paper sx={{ mt: 2, p: 2, bgcolor: 'background.default', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
             {selectedExercise.expected_query}
           </Paper>
         )}

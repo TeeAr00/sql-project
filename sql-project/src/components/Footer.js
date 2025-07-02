@@ -9,11 +9,11 @@ function Footer() {
         py: 2,
         px: 3,
         mt: 'auto',
-        backgroundColor: (theme) => theme.palette.grey[200],
+        backgroundColor: (theme) => theme.palette.primary.main,
         textAlign: 'center'
       }}
     >
-      <Typography variant="body2" color="text.secondary">
+      <Typography variant="body2" color="text.primary">
       © 2025 SQL harjoittelutyökalu — Created by T. Räisänen
       </Typography>
     </Box>

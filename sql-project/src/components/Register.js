@@ -47,10 +47,10 @@ function Register() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        bgcolor: '#1e1e2f',
+        bgcolor: 'background.default',
       }}
     >
-      <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: '#2c2c3e', color: '#fff' }}>
+      <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: 'background.default', color: 'text.primary' }}>
         <Typography variant="h5" sx={{ mb: 2 }}>
           Register
         </Typography>
@@ -59,8 +59,8 @@ function Register() {
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
-          InputLabelProps={{ sx: { color: '#aaa' } }}
+          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
+          InputLabelProps={{ sx: { color: 'text.primary' } }}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -69,8 +69,8 @@ function Register() {
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
-          InputLabelProps={{ sx: { color: '#aaa' } }}
+          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
+          InputLabelProps={{ sx: { color: 'text.primary' } }}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -80,8 +80,8 @@ function Register() {
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
-          InputLabelProps={{ sx: { color: '#aaa' } }}
+          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
+          InputLabelProps={{ sx: { color: 'text.primary' } }}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -91,15 +91,15 @@ function Register() {
           variant="filled"
           fullWidth
           sx={{ mb: 3 }}
-          InputProps={{ sx: { bgcolor: '#3a3a50', color: '#fff' } }}
-          InputLabelProps={{ sx: { color: '#aaa' } }}
+          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
+          InputLabelProps={{ sx: { color: 'text.primary' } }}
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <Button variant="contained" fullWidth onClick={handleRegister}sx={{ mb: 1 }}>
           Register
         </Button>
-        <Button variant="text" fullWidth onClick={() => navigate('/login')} sx={{ color: '#aaa' }}>
+        <Button variant="text" fullWidth onClick={() => navigate('/login')} sx={{ color: 'text.primary' }}>
           Login
         </Button>
       </Paper>

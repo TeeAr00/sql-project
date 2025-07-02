@@ -32,8 +32,6 @@ function SideBar() {
         },
         '& .MuiDrawer-paper': {
           width: collapsedWidth,
-          bgcolor: '#1e1e2f',
-          color: '#ffffff',
           overflowX: 'hidden',
           transition: 'width 0.3s',
           boxSizing: 'border-box',
@@ -55,13 +53,10 @@ function SideBar() {
                   justifyContent: 'flex-start',
                   px: 2.5,
                   '&.Mui-selected': {
-                    bgcolor: '#333354',
                   },
                   '&.Mui-selected:hover': {
-                    bgcolor: '#444467',
                   },
                   '&:hover': {
-                    bgcolor: '#2c2c3e',
                   },
                 }}
               >

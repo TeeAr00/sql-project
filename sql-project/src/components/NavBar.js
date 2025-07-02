@@ -1,9 +1,11 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
 import { Link,useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 function NavBar() {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -14,8 +16,10 @@ function NavBar() {
       position="fixed"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        bgcolor: '#1e1e2f',
-        color: '#ffffff',
+        bgcolor: theme.palette.background.paper,
+        color: theme.palette.text.primary,
+        boxShadow: 'none',
+        borderBottom: `1px solid ${theme.palette.divider}`,
       }}
     >
       <Toolbar>
@@ -27,9 +31,9 @@ function NavBar() {
             component={Link}
             to="/profile"
             sx={{
-              color: '#ffffff',
+              color: theme.palette.text.primary,
               '&:hover': {
-                backgroundColor: '#2c2c3e',
+                backgroundColor: theme.palette.action.hover,
               },
             }}
           >
@@ -38,9 +42,9 @@ function NavBar() {
           <Button
             onClick={handleLogout}
             sx={{
-              color: '#ffffff',
+              color: theme.palette.text.primary,
               '&:hover': {
-                backgroundColor: '#2c2c3e',
+                backgroundColor: theme.palette.action.hover,
               },
             }}
           >

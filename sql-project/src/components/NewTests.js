@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Box, Typography, TextField, Button, Paper, MenuItem,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 const classOptions = [
   { value: 1, label: 'SELECT' },
@@ -19,6 +20,7 @@ function NewTests() {
   ]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const theme = useTheme();
 
   const handleExerciseChange = (index, field, value) => {
     const updated = [...exercises];
@@ -148,12 +150,16 @@ function NewTests() {
 
       <Button variant="outlined" onClick={addExercise}>Lisää tehtävä</Button>
 
-      <Box sx={{ mt: 3 }}>
+      <Box sx={{ mt: 3,display: 'flex' }}>
         <Button
-          variant="contained"
-          color="primary"
+          variant="outlined"
           onClick={handleSubmit}
           disabled={saving}
+          sx={{
+          mb: 3,
+          color: theme.palette.text.primary,
+          borderColor: theme.palette.background.primary,
+        }}
         >
           Tallenna testisetti
         </Button>
