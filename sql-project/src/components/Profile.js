@@ -137,7 +137,7 @@ function Profile() {
           },
         }}
       >
-        Switch to {mode === 'light' ? 'Light' : 'Dark'} Mode
+        Switch to {mode === 'dark' ? 'Light' : 'Dark'} Mode
       </Button>
 
       <Typography variant="h4" gutterBottom>
@@ -159,6 +159,9 @@ function Profile() {
           '& .MuiInputLabel-root': {
             color: theme.palette.text.secondary,
           },
+          '& .MuiInputLabel-root.Mui-disabled': {
+          color: theme.palette.text.primary,
+          },
           '& .MuiInputBase-input.Mui-disabled': {
             WebkitTextFillColor: theme.palette.text.primary,
           },
@@ -177,6 +180,9 @@ function Profile() {
         sx={{
           '& .MuiInputLabel-root': {
             color: theme.palette.text.secondary
+          },
+          '& .MuiInputLabel-root.Mui-disabled': {
+          color: theme.palette.text.primary,
           },
           '& .MuiInputBase-input.Mui-disabled': {
             WebkitTextFillColor: theme.palette.text.primary,
@@ -216,7 +222,7 @@ function Profile() {
 
       {/* sähköposti lomake */}
       {showEmailForm && (
-        <Paper sx={{ mt: 3, p: 3, bgcolor: 'background.default' }}>
+        <Paper sx={{ mt: 3, p: 3}}>
           <Typography variant="h6" gutterBottom>Change Email</Typography>
           <TextField
             fullWidth
@@ -309,7 +315,7 @@ function Profile() {
 
       {/* salasanan lomake */}
       {showPasswordForm && (
-        <Paper sx={{ mt: 3, p: 3, bgcolor: 'background.default' }}>
+        <Paper sx={{ mt: 3, p: 3}}>
           <Typography variant="h6" gutterBottom>Change Password</Typography>
           <TextField
             fullWidth

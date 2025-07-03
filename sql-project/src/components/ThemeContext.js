@@ -20,7 +20,7 @@ export function CustomThemeProvider({ children }) {
 
   return (
     <ThemeToggleContext.Provider value={{ mode, toggleTheme }}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider key={mode} theme={theme}>
         <CssBaseline />
         {children}
       </ThemeProvider>

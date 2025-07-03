@@ -1,10 +1,10 @@
 import { createTheme } from '@mui/material/styles';
 
-export const getTheme = (mode) =>
-  createTheme({
+export const getTheme = (mode) => {
+  return createTheme({
     palette: {
       mode,
-      ...(mode === 'light'
+      ...(mode === 'dark'
         ? {
           primary: {
               main: '#999999',
@@ -20,7 +20,7 @@ export const getTheme = (mode) =>
           }
         : {
           primary: {
-              main: '#FFFFFF',
+              main: '#555555',
               contrastText: '#ffffff',
               dark: '#333333',
             },
@@ -38,3 +38,4 @@ export const getTheme = (mode) =>
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     },
   });
+};

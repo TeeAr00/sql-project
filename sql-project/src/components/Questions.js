@@ -156,7 +156,16 @@ function Questions() {
             </motion.div>
           ))}
         </Box>
-        <Button sx={{ mt: 4 }} onClick={() => setSelectedTestSet(null)}>
+        <Button
+          sx={(theme) => ({
+            mt: 4,
+            color: theme.palette.text.primary,
+            '&:hover': {
+              backgroundColor: theme.palette.action.hover,
+            },
+          })}
+          onClick={() => setSelectedTestSet(null)}
+        >
           &larr; Takaisin testivalikkoon
         </Button>
       </Box>
@@ -188,18 +197,57 @@ function Questions() {
           fullWidth
           value={userQuery}
           onChange={(e) => setUserQuery(e.target.value)}
-          sx={{ mt: 2 }}
+          sx={(theme) => ({
+            mt: 2,
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: theme.palette.text.primary,
+              },
+              '&:hover fieldset': {
+                borderColor: theme.palette.text.primary,
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: theme.palette.primary.main,
+                borderWidth: '2px',
+              },
+            },
+            '& .MuiInputLabel-root': {
+              color: theme.palette.text.primary,
+            },
+          })}
         />
 
-        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between' }}>
+        <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="outlined" onClick={() => setShowHint(!showHint)}>
+            <Button
+              variant="outlined"
+              onClick={() => setShowHint(!showHint)}
+              sx={(theme) => ({
+                color: theme.palette.text.primary,
+                borderColor: theme.palette.text.primary,
+                '&:hover': {
+                  backgroundColor: theme.palette.action.hover,
+                  borderColor: theme.palette.text.primary,
+                },
+              })}
+            >
               {showHint ? 'Piilota vinkki' : 'Näytä vinkki'}
             </Button>
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button variant="outlined" onClick={() => setShowImage((prev) => !prev)}>
+            <Button
+              variant="outlined"
+              onClick={() => setShowImage((prev) => !prev)}
+              sx={(theme) => ({
+                color: theme.palette.text.primary,
+                borderColor: theme.palette.text.primary,
+                '&:hover': {
+                  backgroundColor: theme.palette.action.hover,
+                  borderColor: theme.palette.text.primary,
+                },
+              })}
+            >
               {showImage ? 'Piilota er-kaavio' : 'Näytä er-kaavio'}
             </Button>
           </motion.div>
@@ -210,6 +258,13 @@ function Questions() {
               color="primary"
               onClick={handleSubmit}
               disabled={!userQuery.trim()}
+              sx={(theme) => ({
+                color: theme.palette.primary.contrastText,
+                backgroundColor: theme.palette.primary.main,
+                '&:hover': {
+                  backgroundColor: theme.palette.primary.dark || theme.palette.primary.main,
+                },
+              })}
             >
               Tarkista
             </Button>
@@ -256,7 +311,14 @@ function Questions() {
         )}
 
         <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button sx={{ mt: 4 }} onClick={() => setSelectedExercise(null)}>
+          <Button sx={(theme) => ({
+            mt: 4,
+            color: theme.palette.text.primary,
+            '&:hover': {
+              backgroundColor: theme.palette.action.hover,
+            },
+          })}
+          onClick={() => setSelectedExercise(null)}>
             &larr; Takaisin harjoituslistaan
           </Button>
         </motion.div>

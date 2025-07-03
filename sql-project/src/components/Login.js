@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleLogin = async () => {
   try {
@@ -48,7 +50,8 @@ function LoginPage() {
       }}
     >
       <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: 'background.default', color: '#fff' }}>
-        <Typography variant="h5" sx={{ mb: 2 }}>
+        <Typography variant="h5" sx={{ mb: 2,color: theme.palette.text.primary,
+          borderColor: theme.palette.text.primary, }}>
           Login
         </Typography>
         <TextField
@@ -56,7 +59,7 @@ function LoginPage() {
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: 'background.default', color: '#fff' } }}
+          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
           InputLabelProps={{ sx: { color: '#aaa' } }}
           value={username}
           onChange={(e) => setUsername(e.target.value)}

@@ -57,7 +57,6 @@ function NewTests() {
         savedExerciseIds.push(data.id);
       }
 
-      // Step 2: Save the test set
       const res = await fetch('http://localhost:5000/api/exercises/test-sets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -86,24 +85,35 @@ function NewTests() {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h4" gutterBottom>Testisetin luonti</Typography>
+      <Typography variant="h4" gutterBottom sx={{ color: (theme) => theme.palette.text.primary }}>Testisetin luonti</Typography>
       <TextField
         label="Testisetin nimi"
         fullWidth
         value={testSetName}
         onChange={(e) => setTestSetName(e.target.value)}
-        sx={{ mb: 3 }}
+        sx={{
+          mb: 3,
+          '& .MuiInputBase-input': {
+            color: (theme) => theme.palette.text.primary,
+          },
+          '& .MuiInputLabel-root': {
+            color: (theme) => theme.palette.text.primary,
+          },
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderColor: (theme) => theme.palette.text.primary,
+          },
+        }}
       />
 
       {exercises.map((ex, index) => (
-        <Paper key={index} sx={{ mb: 3, p: 2 }}>
+        <Paper key={index} sx={{ mb: 3, p: 2,borderColor: theme.palette.background.primary }}>
           <Typography variant="h6">Tehtävä {index + 1}</Typography>
           <TextField
             label="Kuvaus"
             fullWidth
             multiline
             rows={2}
-            sx={{ mt: 2 }}
+            sx={{ mt: 2,color: theme.palette.text.primary }}
             value={ex.description}
             onChange={(e) => handleExerciseChange(index, 'description', e.target.value)}
           />
@@ -148,18 +158,48 @@ function NewTests() {
         </Paper>
       ))}
 
-      <Button variant="outlined" onClick={addExercise}>Lisää tehtävä</Button>
+      <Button
+       variant="outlined" 
+       onClick={addExercise}
+       sx={(theme) => ({
+          mb: 3,
+          color: theme.palette.text.primary,
+          borderColor: theme.palette.text.primary,
+          '&:hover': {
+            borderColor: theme.palette.text.primary,
+            backgroundColor: theme.palette.action.hover, 
+          },
+          '&:focus': {
+            borderColor: theme.palette.text.primary,
+          },
+          '&:active': {
+            borderColor: theme.palette.text.primary,
+          },
+        })}
+      >
+        Lisää tehtävä
+        </Button>
 
       <Box sx={{ mt: 3,display: 'flex' }}>
         <Button
           variant="outlined"
           onClick={handleSubmit}
           disabled={saving}
-          sx={{
+          sx={(theme) => ({
           mb: 3,
           color: theme.palette.text.primary,
-          borderColor: theme.palette.background.primary,
-        }}
+          borderColor: theme.palette.text.primary,
+          '&:hover': {
+            borderColor: theme.palette.text.primary,
+            backgroundColor: theme.palette.action.hover, 
+          },
+          '&:focus': {
+            borderColor: theme.palette.text.primary,
+          },
+          '&:active': {
+            borderColor: theme.palette.text.primary,
+          },
+        })}
         >
           Tallenna testisetti
         </Button>
