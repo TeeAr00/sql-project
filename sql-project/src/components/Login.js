@@ -60,7 +60,7 @@ function LoginPage() {
           fullWidth
           sx={{ mb: 2 }}
           InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
-          InputLabelProps={{ sx: { color: '#aaa' } }}
+          InputLabelProps={{ sx: { color: 'text.primary' } }}
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
@@ -78,7 +78,7 @@ function LoginPage() {
         <Button variant="contained" fullWidth onClick={handleLogin}sx={{ mb: 1 }}>
           Login
         </Button>
-        <Button variant="text" fullWidth onClick={() => navigate('/register')} sx={{ color: 'text.primary' }}>
+        <Button variant="contained" fullWidth onClick={() => navigate('/register')}>
           Register
         </Button>
       </Paper>

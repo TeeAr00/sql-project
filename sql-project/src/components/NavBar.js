@@ -1,11 +1,15 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Box, Button, IconButton } from '@mui/material';
 import { Link,useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
+import ContrastIcon from '@mui/icons-material/Contrast';
+import { useThemeToggle } from './ThemeContext';
+
 
 function NavBar() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const { toggleTheme } = useThemeToggle();
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -26,7 +30,18 @@ function NavBar() {
         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
           SQL Laboratory
         </Typography>
-        <Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <IconButton
+            onClick={toggleTheme}
+            sx={{
+              color: theme.palette.text.primary,
+              '&:hover': {
+                backgroundColor: theme.palette.action.hover,
+              },
+            }}
+          >
+            <ContrastIcon />
+          </IconButton>
           <Button
             component={Link}
             to="/profile"

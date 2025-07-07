@@ -99,7 +99,7 @@ function Register() {
         <Button variant="contained" fullWidth onClick={handleRegister}sx={{ mb: 1 }}>
           Register
         </Button>
-        <Button variant="text" fullWidth onClick={() => navigate('/login')} sx={{ color: 'text.primary' }}>
+        <Button variant="contained" fullWidth onClick={() => navigate('/login')}>
           Login
         </Button>
       </Paper>
