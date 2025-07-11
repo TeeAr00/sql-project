@@ -4,13 +4,16 @@ import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import { CustomThemeProvider } from './components/ThemeContext';
+import { SoundProvider } from './components/SoundContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CustomThemeProvider>
-      <App />
-    </CustomThemeProvider>
+    <SoundProvider>
+      <CustomThemeProvider>
+        <App />
+      </CustomThemeProvider>
+    </SoundProvider>
   </React.StrictMode>
 );
 

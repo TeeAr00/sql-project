@@ -6,16 +6,14 @@ import ContrastIcon from '@mui/icons-material/Contrast';
 import { useThemeToggle } from './ThemeContext';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import { useSoundControl } from './SoundContext';
 
 function NavBar() {
   const navigate = useNavigate();
   const theme = useTheme();
   const { toggleTheme } = useThemeToggle();
 
-  const [muted, setMuted] = useState(() => {
-    const stored = localStorage.getItem('muted');
-    return stored === 'true';
-  })
+  const { muted, setMuted } = useSoundControl();
 
   useEffect(() => {
     localStorage.setItem('muted', muted);
@@ -26,9 +24,7 @@ function NavBar() {
     navigate('/login');
   };
 
-  const toggleMute = () => {
-    setMuted((prev) => !prev);
-  };
+  const toggleMute = () => setMuted((prev) => !prev);
   
   return (
     <AppBar

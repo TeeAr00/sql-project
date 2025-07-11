@@ -3,8 +3,12 @@ import { Typography, Box, Button, TextField, Paper, CircularProgress } from '@mu
 import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { motion, AnimatePresence } from 'framer-motion';
+import useSound from 'use-sound';
+import { useSoundControl } from './SoundContext';
 
 import er_diagram from '../assets/er_diagrammi.png';
+import correctSfx from '../assets/correct.mp3';
+import wrongSfx from '../assets/wrong.mp3';
 
 const classLabels = {
   1: 'SELECT',
@@ -25,6 +29,9 @@ function Questions() {
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [showImage, setShowImage] = useState(false);
+  const { muted } = useSoundControl();
+  const [playCorrect] = useSound(correctSfx, { soundEnabled: !muted });
+  const [playWrong] = useSound(wrongSfx, { soundEnabled: !muted });
 
   // Hae harjoitukset bäkkäristä
   // Vanha pelkällä idllä haku, uusi tehtävä settien perusteella
@@ -113,7 +120,14 @@ function Questions() {
         body: JSON.stringify({ query: userQuery }),
       });
       const data = await res.json();
-      setFeedback(data.correct ? ' Oikein!' : ' Tarkista kyselysi');
+      const isCorrect = data.correct;
+      setFeedback(isCorrect ? ' Oikein!' : ' Tarkista kyselysi');
+
+      if (isCorrect) {
+        playCorrect();
+      } else {
+        playWrong();
+      }
     } catch (err) {
       console.error('Virhe tarkistuksessa:', err);
       setFeedback(' Virhe tarkistuksessa');
