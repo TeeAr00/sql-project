@@ -6,6 +6,10 @@ module.exports = (db2) => {
   //console.log('register kutsu lähti');
   router.post('/', async (req, res) => {
     const { username, email, password } = req.body;
+    //tyhjät kentät pois
+    if (!username || !email || !password || username.trim() === '' || email.trim() === '' || password.trim() === '') {
+      return res.status(400).json({ message: 'All fields (username, email, password) are required and cannot be empty' });
+    }
 
     try {
       const [rows] = await db2.promise().query('SELECT * FROM users WHERE username = ?', [username]);
