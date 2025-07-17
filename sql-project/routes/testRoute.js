@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const authenticateToken = require('../middleware/auth');
 
 module.exports = (db) => {
-  router.get('/', (req, res) => {
+  router.get('/', authenticateToken, (req, res) => {
     db.query('SELECT firstname FROM person;', (err, results) => {
       if (err) {
         console.error('Error fetching persons:', err);

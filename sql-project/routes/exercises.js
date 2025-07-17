@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const authenticateToken = require('../middleware/auth');
+const isAdmin = require('../middleware/isAdmin');
 
 //nopea fiksaus, jotta kentillä ei voi muokata tietokantaa, parempi toteutus myöhemmin
 function isSelectQuery(query) {
@@ -11,7 +13,7 @@ function isSelectQuery(query) {
 module.exports = (db) => {
 
   //staattiset siirretty ylös ennen synaamisia. Ilmeisesti ei hae tarkemipia hakuja, kun jo löydetty reitti.
-  router.post('/test-sets', async (req, res) => {
+  router.post('/test-sets',authenticateToken, isAdmin , async (req, res) => {
   const { name, exerciseIds } = req.body;
   if (!name || !Array.isArray(exerciseIds)) {
     return res.status(400).json({ error: 'Invalid input' });
@@ -71,7 +73,7 @@ module.exports = (db) => {
       res.status(500).json({ error: 'Database error' });
     }
   });
-  router.post('/', async (req, res) => {
+  router.post('/',authenticateToken, isAdmin , async (req, res) => {
     const { description, expected_query, hint, class: exerciseClass } = req.body;
 
     if (!description || !expected_query || !exerciseClass) {

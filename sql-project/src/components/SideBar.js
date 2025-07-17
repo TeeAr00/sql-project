@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Drawer,
   List,
@@ -8,16 +8,33 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const drawerWidth = 240;
 const collapsedWidth = 60;
 
 function SideBar() {
   const location = useLocation();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        setIsAdmin(decoded.role === 'admin');
+      } catch (err) {
+        console.error('Invalid token:', err);
+        setIsAdmin(false);
+      }
+    }
+  }, []);
+
   const menuItems = [
     { text: 'Home', path: '/Home' },
     { text: 'Questions', path: '/questions' },
-    { text: 'New Test', path: '/newTests' },
+    ...(isAdmin ? [{ text: 'New Test', path: '/newTests' }] : []),
   ];
 
   return (

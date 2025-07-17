@@ -2,6 +2,7 @@ import React from 'react';
 import { CssBaseline, Box, Toolbar, Typography } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
 //Komponentit
 import Footer from './Footer';
@@ -14,16 +15,40 @@ import Register from './Register';
 import Auth from './Auth';
 import NewTests from './NewTests';
 
-//Databasen testaukseen
+//Databasen testaukseen + roolin varmennuksen testaus
 function HomePage() {
   const [persons, setPersons] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/testRoute')
-      .then((res) => res.json())
-      .then((data) => setPersons(data))
-      .catch((err) => console.error('Virhe haettaessa henkilöitä:', err));
+    const token = localStorage.getItem('authToken');
+
+    if (!token) return;
+
+    try {
+      const decoded = jwtDecode(token);
+      if (decoded.role === 'admin') {
+        setIsAdmin(true);
+
+        fetch('http://localhost:5000/api/testRoute', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error('Unauthorized');
+            return res.json();
+          })
+          .then((data) => setPersons(data))
+          .catch((err) => console.error('Virhe haettaessa henkilöitä:', err));
+      }
+    } catch (error) {
+      console.error('Invalid token:', error);
+    }
   }, []);
+
 
   return (
     <div>

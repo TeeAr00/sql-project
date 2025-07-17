@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box, Typography, TextField, Button, Paper, MenuItem,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { jwtDecode } from 'jwt-decode';
 
 const classOptions = [
   { value: 1, label: 'SELECT' },
@@ -21,6 +23,29 @@ function NewTests() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
   const theme = useTheme();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.role !== 'admin') {
+          navigate('/Home');
+        } else {
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Invalid token:', err);
+        navigate('/Home');
+      }
+    } else {
+      navigate('/Home');
+    }
+  }, [navigate]);
+
+  if (loading) return null;
 
   const handleExerciseChange = (index, field, value) => {
     const updated = [...exercises];
