@@ -14,6 +14,7 @@ import Login from './Login';
 import Register from './Register';
 import Auth from './Auth';
 import NewTests from './NewTests';
+import EditTestSets from './EditTestSets';
 
 //Databasen testaukseen + roolin varmennuksen testaus
 function HomePage() {
@@ -123,6 +124,16 @@ function App() {
             <Auth>
               <MainLayout>
                 <NewTests />
+              </MainLayout>
+            </Auth>
+          }
+        />
+        <Route
+          path="/editSets"
+          element={
+            <Auth>
+              <MainLayout>
+                <EditTestSets />
               </MainLayout>
             </Auth>
           }

@@ -25,6 +25,7 @@ function NewTests() {
   const theme = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('authToken');
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -74,7 +75,10 @@ function NewTests() {
       for (const ex of exercises) {
         const res = await fetch('http://localhost:5000/api/exercises', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
           body: JSON.stringify(ex)
         });
         const data = await res.json();
@@ -84,7 +88,10 @@ function NewTests() {
 
       const res = await fetch('http://localhost:5000/api/exercises/test-sets', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           name: testSetName,
           exerciseIds: savedExerciseIds
