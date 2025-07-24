@@ -195,19 +195,34 @@ function Questions() {
       <Box sx={{ mt: 5, textAlign: 'center' }}>
         <Typography variant="h4">Harjoitukset</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, flexWrap: 'wrap', mt: 4 }}>
-          {exercises.map((ex) => (
-            <motion.div
-              key={ex.id}
-              layoutId={`card-${ex.id}`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => selectExercise(ex.id)}
-            >
-              <Button variant="contained" sx={{ px: 4, py: 2 }}>
-                {`Q${ex.id}: ${classLabels[ex.class] || 'Other'}`}
-              </Button>
-            </motion.div>
-          ))}
+          {exercises.map((ex, index) => {
+            const exId = ex.id;
+            const hasAttempt = attempts[exId]?.tried;
+            const isNext = index === 0 || exercises[index - 1]?.id in attempts;
+
+            const isDisabled = !isNext;
+
+            return (
+              <motion.div
+                key={exId}
+                layoutId={`card-${exId}`}
+                whileHover={isDisabled ? {} : { scale: 1.05 }}
+                whileTap={isDisabled ? {} : { scale: 0.95 }}
+                onClick={() => {
+                  if (!isDisabled) selectExercise(exId);
+                }}
+              >
+                <Button
+                  variant="contained"
+                  disabled={isDisabled}
+                  sx={{ px: 4, py: 2, opacity: isDisabled ? 0.5 : 1 }}
+                >
+                  {`Q${ex.id}: ${classLabels[ex.class] || 'Other'}`}
+                </Button>
+              </motion.div>
+            );
+          })}
+
         </Box>
         <Button
           sx={(theme) => ({
