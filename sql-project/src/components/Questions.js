@@ -29,6 +29,10 @@ function Questions() {
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [showImage, setShowImage] = useState(false);
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [testSetCompleted, setTestSetCompleted] = useState(false);
+
+
   const { muted } = useSoundControl();
   const [playCorrect] = useSound(correctSfx, { soundEnabled: !muted });
   const [playWrong] = useSound(wrongSfx, { soundEnabled: !muted });
@@ -101,7 +105,9 @@ function Questions() {
     try {
       const res = await fetch(`http://localhost:5000/api/exercises/${id}`);
       const data = await res.json();
+      const index = exercises.findIndex((ex) => ex.id === id);
       setSelectedExercise(data);
+      setCurrentExerciseIndex(index);
       setUserQuery('');
       setFeedback(null);
       setShowHint(false);
@@ -125,6 +131,22 @@ function Questions() {
 
       if (isCorrect) {
         playCorrect();
+        // Move to next exercise after short delay
+        setTimeout(() => {
+          const nextIndex = currentExerciseIndex + 1;
+          if (nextIndex < exercises.length) {
+            const nextExercise = exercises[nextIndex];
+            setCurrentExerciseIndex(nextIndex);
+            setSelectedExercise(nextExercise);
+            setUserQuery('');
+            setFeedback(null);
+            setShowHint(false);
+          } else {  
+            setTestSetCompleted(true);
+            setFeedback('Tehtäväsetti suoritettu!');
+          }
+
+        }, 1500);
       } else {
         playWrong();
       }
@@ -133,6 +155,7 @@ function Questions() {
       setFeedback(' Virhe tarkistuksessa');
     }
   }
+
 
   if (!selectedTestSet) {
     return (
@@ -185,6 +208,27 @@ function Questions() {
       </Box>
     );
   }
+
+  if (testSetCompleted) {
+    return (
+      <Box sx={{ mt: 5, textAlign: 'center' }}>
+        <Typography variant="h4" gutterBottom>
+          {feedback}
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setSelectedTestSet(null);
+            setFeedback(null);
+            setTestSetCompleted(false);
+          }}
+        >
+          Palaa testivalikkoon
+        </Button>
+      </Box>
+    );
+  }
+
   return (
     <AnimatePresence mode="wait">
     {selectedExercise && (
