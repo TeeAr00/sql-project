@@ -31,6 +31,8 @@ function Questions() {
   const [showImage, setShowImage] = useState(false);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [testSetCompleted, setTestSetCompleted] = useState(false);
+  const [attempts, setAttempts] = useState({});
+
 
 
   const { muted } = useSoundControl();
@@ -127,6 +129,20 @@ function Questions() {
       });
       const data = await res.json();
       const isCorrect = data.correct;
+      const exId = selectedExercise.id;
+
+        setAttempts((prev) => {
+          const alreadyTried = prev[exId]?.tried;
+
+          return {
+            ...prev,
+            [exId]: {
+              tried: true,
+              correctFirstTry: !alreadyTried && isCorrect
+            }
+          };
+        });
+
       setFeedback(isCorrect ? ' Oikein!' : ' Tarkista kyselysi');
 
       if (isCorrect) {
@@ -210,18 +226,30 @@ function Questions() {
   }
 
   if (testSetCompleted) {
+    const correctFirstTries = Object.values(attempts).filter(a => a.correctFirstTry).length;
+    const percentage = ((correctFirstTries / exercises.length) * 100).toFixed(2);
+
     return (
       <Box sx={{ mt: 5, textAlign: 'center' }}>
         <Typography variant="h4" gutterBottom>
           {feedback}
         </Typography>
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Sait {correctFirstTries} / {exercises.length} oikein ensimmäisellä yrityksellä.
+        </Typography>
+        <Typography variant="h6" sx={{ mt: 1 }}>
+          Pistemäärä: {percentage}%
+        </Typography>
+
         <Button
           variant="contained"
           onClick={() => {
             setSelectedTestSet(null);
             setFeedback(null);
             setTestSetCompleted(false);
+            setAttempts({});
           }}
+          sx={{ mt: 3 }}
         >
           Palaa testivalikkoon
         </Button>
