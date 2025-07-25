@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Typography, Box, Button, TextField, Paper, CircularProgress } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -32,6 +32,7 @@ function Questions() {
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [testSetCompleted, setTestSetCompleted] = useState(false);
   const [attempts, setAttempts] = useState({});
+  const scoreSavedRef = useRef(false);
 
 
 
@@ -87,36 +88,45 @@ function Questions() {
   // }
 
   useEffect(() => {
-    if (testSetCompleted) {
-      const correctFirstTries = Object.values(attempts).filter(a => a.correctFirstTry).length;
-      const percentage = parseFloat(((correctFirstTries / exercises.length) * 100).toFixed(2));
-      const token = localStorage.getItem('authToken');
+  if (!testSetCompleted || scoreSavedRef.current) return;
 
-      const testSetObj = testSets.find(set => set.id === selectedTestSet);
-      const testSetName = testSetObj ? testSetObj.name : 'Virhe';
+    const correctFirstTries = Object.values(attempts).filter(a => a.correctFirstTry).length;
+    const percentage = parseFloat(((correctFirstTries / exercises.length) * 100).toFixed(2));
+    const token = localStorage.getItem('authToken');
 
-      async function saveScore() {
-        try {
-          console.log("JWT Token:", token);
-          await fetch('http://localhost:5000/api/scores', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-              test_set_name: testSetName,
-              score: percentage
-            })
-          });
-        } catch (err) {
-          console.error('Virhe tallennettaessa:', err);
-        }
-      }
+    const testSetObj = testSets.find(set => set.id === selectedTestSet);
+    const testSetName = testSetObj ? testSetObj.name : 'Virhe';
 
-      saveScore();
+    if (!testSetObj) {
+      console.warn("Tehtävä settiä ei löydy.");
+      return;
     }
+
+    async function saveScore() {
+      try {
+        await fetch('http://localhost:5000/api/scores', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            test_set_name: testSetName,
+            score: percentage
+          })
+        });
+
+        console.log("Score saved.");
+        scoreSavedRef.current = true;
+      } catch (err) {
+        console.error('Virhe tallennettaessa:', err);
+      }
+    }
+
+    saveScore();
   }, [testSetCompleted, attempts, exercises.length, selectedTestSet, testSets]);
+
+
 
 
   useEffect(() => {
