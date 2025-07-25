@@ -87,6 +87,39 @@ function Questions() {
   // }
 
   useEffect(() => {
+    if (testSetCompleted) {
+      const correctFirstTries = Object.values(attempts).filter(a => a.correctFirstTry).length;
+      const percentage = parseFloat(((correctFirstTries / exercises.length) * 100).toFixed(2));
+      const token = localStorage.getItem('authToken');
+
+      const testSetObj = testSets.find(set => set.id === selectedTestSet);
+      const testSetName = testSetObj ? testSetObj.name : 'Virhe';
+
+      async function saveScore() {
+        try {
+          console.log("JWT Token:", token);
+          await fetch('http://localhost:5000/api/scores', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+              test_set_name: testSetName,
+              score: percentage
+            })
+          });
+        } catch (err) {
+          console.error('Virhe tallennettaessa:', err);
+        }
+      }
+
+      saveScore();
+    }
+  }, [testSetCompleted, attempts, exercises.length, selectedTestSet, testSets]);
+
+
+  useEffect(() => {
     if (!selectedTestSet) return;
     setLoading(true);
     async function fetchExercises() {
@@ -235,38 +268,6 @@ function Questions() {
           onClick={() => setSelectedTestSet(null)}
         >
           &larr; Takaisin testivalikkoon
-        </Button>
-      </Box>
-    );
-  }
-
-  if (testSetCompleted) {
-    const correctFirstTries = Object.values(attempts).filter(a => a.correctFirstTry).length;
-    const percentage = ((correctFirstTries / exercises.length) * 100).toFixed(2);
-
-    return (
-      <Box sx={{ mt: 5, textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>
-          {feedback}
-        </Typography>
-        <Typography variant="h6" sx={{ mt: 2 }}>
-          Sait {correctFirstTries} / {exercises.length} oikein ensimmäisellä yrityksellä.
-        </Typography>
-        <Typography variant="h6" sx={{ mt: 1 }}>
-          Pistemäärä: {percentage}%
-        </Typography>
-
-        <Button
-          variant="contained"
-          onClick={() => {
-            setSelectedTestSet(null);
-            setFeedback(null);
-            setTestSetCompleted(false);
-            setAttempts({});
-          }}
-          sx={{ mt: 3 }}
-        >
-          Palaa testivalikkoon
         </Button>
       </Box>
     );

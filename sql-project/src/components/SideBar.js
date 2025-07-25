@@ -34,6 +34,7 @@ function SideBar() {
   const menuItems = [
     { text: 'Home', path: '/Home' },
     { text: 'Questions', path: '/questions' },
+    { text: 'Results', path: '/scores' },
     ...(isAdmin ? [
     { text: 'New Test', path: '/newTests' },
     { text: 'Edit Sets', path: '/editSets' },
