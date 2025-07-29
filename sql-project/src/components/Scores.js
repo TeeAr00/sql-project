@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import {
   Typography, Box, Paper, CircularProgress, List, ListItem, ListItemText,
-  Select, MenuItem, Checkbox, ListItemIcon
+  Select, MenuItem, Checkbox, Button, Collapse
 } from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { LineChart } from '@mui/x-charts/LineChart';
 
 function Scores() {
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTests, setSelectedTests] = useState([]);
   const [sortOption, setSortOption] = useState('score_desc');
+  const [openChartId, setOpenChartId] = useState(null);
 
   useEffect(() => {
     async function fetchScores() {
@@ -47,6 +50,17 @@ function Scores() {
     if (sortOption === 'date_desc') return new Date(b.scored_at) - new Date(a.scored_at);
     return 0;
   });
+
+  const toggleChart = (scoreId) => {
+    setOpenChartId(prev => prev === scoreId ? null : scoreId);
+  };
+
+  const getLastScoresForTest = (testSetName) => {
+    const testScores = scores
+      .filter(s => s.test_set_name === testSetName)
+      .sort((a, b) => new Date(a.scored_at) - new Date(b.scored_at));
+    return testScores.slice(-5);
+  };
 
   if (loading) {
     return <CircularProgress sx={{ mt: 5, display: 'block', mx: 'auto' }} />;
@@ -99,14 +113,63 @@ function Scores() {
       ) : (
         <Paper sx={{ maxWidth: 600, mx: 'auto', mt: 3, p: 2 }}>
           <List>
-            {sortedScores.map((score) => (
-              <ListItem key={score.id} divider>
-                <ListItemText
-                  primary={`${score.test_set_name} - ${Number(score.score).toFixed(2)}%`}
-                  secondary={new Date(score.scored_at).toLocaleString('fi-FI')}
-                />
-              </ListItem>
-            ))}
+            {sortedScores.map((score) => {
+              const relatedScores = getLastScoresForTest(score.test_set_name);
+              const chartData = relatedScores.map((s) => ({
+                score: Math.round(s.score),
+                label: new Date(s.scored_at).toLocaleDateString('fi-FI'),
+              }));
+
+
+              return (
+                <React.Fragment key={score.id}>
+                  <ListItem divider sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <ListItemText
+                      primary={`${score.test_set_name} - ${Number(score.score).toFixed(2)}%`}
+                      secondary={new Date(score.scored_at).toLocaleString('fi-FI')}
+                    />
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => toggleChart(score.id)}
+                      endIcon={openChartId === score.id ? <ExpandLess /> : <ExpandMore />}
+                    >
+                      Näytä edistyminen
+                    </Button>
+                  </ListItem>
+
+                  <Collapse in={openChartId === score.id} timeout="auto" unmountOnExit>
+                    <Box sx={{ my: 2 }}>
+                      {relatedScores.length <= 1 ? (
+                        <Typography variant="body2" color="text.secondary">
+                          Ei tarpeeksi suorituksia
+                        </Typography>
+                      ) : (
+                        <LineChart
+                          height={300}
+                          series={[{
+                            data: chartData.map(item => item.score),
+                            color: '#1976d2',
+                          }]}
+                          xAxis={[{
+                            scaleType: 'band',
+                            data: chartData.map((_, i) => i + 1),
+                            ticks: chartData.map((_, i) => i + 1),
+                            format: () => '',
+                            label: '',
+                          }]}
+                          yAxis={[{
+                            min: 0,
+                            max: 100,
+                            label: 'Pisteet (%)',
+                          }]}
+                        />
+                      )}
+                    </Box>
+                  </Collapse>
+                </React.Fragment>
+              );
+            })}
           </List>
         </Paper>
       )}
