@@ -10,7 +10,7 @@ function Scores() {
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTests, setSelectedTests] = useState([]);
-  const [sortOption, setSortOption] = useState('score_desc');
+  const [sortOption, setSortOption] = useState('date_desc');
   const [openChartId, setOpenChartId] = useState(null);
 
   useEffect(() => {
