@@ -34,13 +34,13 @@ function Profile() {
         if (!response.ok) {
           const errorText = await response.text();
           console.error('Backend response:', errorText);
-          throw new Error('Failed to fetch profile data');
+          throw new Error('Virhe haettaessa profiili tietoja');
         }
 
         const data = await response.json();
         setUserData({ username: data.username, email: data.email });
       } catch (error) {
-        console.error('Profile fetch error:', error);
+        console.error('Virhe:', error);
       }
     };
 
@@ -49,11 +49,11 @@ function Profile() {
 
   const handleEmailChange = async () => {
     if (oldEmail !== userData.email) {
-      alert('Old email does not match your current email.');
+      alert('Vanha sähköposti ei täsmää.');
       return;
     }
     if (!newEmail || !emailPassword) {
-      alert('Please fill all fields.');
+      alert('Täytä kaikki kentät.');
       return;
     }
 
@@ -70,25 +70,25 @@ function Profile() {
 
       if (!response.ok) {
         const errData = await response.json();
-        alert(errData.message || 'Failed to update email.');
+        alert(errData.message || 'Virhe päivittäessä sähköpostia.');
         return;
       }
 
-      alert('Email updated successfully!');
+      alert('Sähköposti vaihdettu!');
       setUserData(prev => ({ ...prev, email: newEmail }));
       setShowEmailForm(false);
       setOldEmail('');
       setNewEmail('');
       setEmailPassword('');
     } catch (error) {
-      console.error('Email update error:', error);
-      alert('Something went wrong.');
+      console.error('Virhe päivittäessä sähköpostia:', error);
+      alert('Virhe.');
     }
   };
 
   const handlePasswordChange = async () => {
     if (!currentPassword || !newPassword) {
-      alert('Please fill all password fields.');
+      alert('Täytä molemmat salasanakentät.');
       return;
     }
 
@@ -105,24 +105,24 @@ function Profile() {
 
       if (!response.ok) {
         const errData = await response.json();
-        alert(errData.message || 'Failed to update password.');
+        alert(errData.message || 'Virhe päivittäessä salasanaa.');
         return;
       }
 
-      alert('Password updated successfully!');
+      alert('Salasana vaihdettu!');
       setShowPasswordForm(false);
       setCurrentPassword('');
       setNewPassword('');
     } catch (error) {
-      console.error('Password update error:', error);
-      alert('Something went wrong.');
+      console.error('Virhe päivittäessä salasanaa:', error);
+      alert('Virhe.');
     }
   };
 
   return (
     <Box sx={{ p: 4, maxWidth: 600, mx: 'auto', }}>
       <Typography variant="h6" gutterBottom>
-        Dark/Light Theme
+        Tumma/Vaalea teema
       </Typography>
       <Button
         variant="outlined"
@@ -137,20 +137,20 @@ function Profile() {
           },
         }}
       >
-        Switch to {mode === 'dark' ? 'Light' : 'Dark'} Mode
+        Vaihda teema
       </Button>
 
       <Typography variant="h4" gutterBottom>
-        Profile
+        Profiili
       </Typography>
 
       <Typography variant="h6" gutterBottom>
-        Profile information
+        Profiilin tiedot
       </Typography>
 
       <TextField
         fullWidth
-        label="Username"
+        label="Käyttäjänimi"
         margin="normal"
         value={userData.username}
         disabled
@@ -172,7 +172,7 @@ function Profile() {
       />
       <TextField
         fullWidth
-        label="Email"
+        label="Sähköposti"
         margin="normal"
         value={userData.email}
         disabled
@@ -204,7 +204,7 @@ function Profile() {
           borderColor: theme.palette.text.primary,
         }}
         >
-          Change Email
+          Vaihda sähköposti
         </Button>
         <Button variant="outlined" onClick={() => {
           setShowPasswordForm(!showPasswordForm);
@@ -216,17 +216,16 @@ function Profile() {
           borderColor: theme.palette.text.primary,
         }}
         >
-          Change Password
+          Vaihda salasana
         </Button>
       </Box>
 
-      {/* sähköposti lomake */}
       {showEmailForm && (
         <Paper sx={{ mt: 3, p: 3}}>
-          <Typography variant="h6" gutterBottom>Change Email</Typography>
+          <Typography variant="h6" gutterBottom>Vaihda sähköposti</Typography>
           <TextField
             fullWidth
-            label="Current Email"
+            label="Nykyinen sähköpsoti"
             margin="normal"
             value={oldEmail}
             onChange={e => setOldEmail(e.target.value)}
@@ -252,7 +251,7 @@ function Profile() {
           />
           <TextField
             fullWidth
-            label="New Email"
+            label="Uusi sähköposti"
             margin="normal"
             value={newEmail}
             onChange={e => setNewEmail(e.target.value)}
@@ -278,7 +277,7 @@ function Profile() {
           />
           <TextField
             fullWidth
-            label="Password"
+            label="Salasana"
             type="password"
             margin="normal"
             value={emailPassword}
@@ -308,18 +307,17 @@ function Profile() {
           color: theme.palette.text.primary,
           borderColor: theme.palette.text.primary,
         }} onClick={handleEmailChange}>
-            Update Email
+            Päivitä sähköposti
           </Button>
         </Paper>
       )}
 
-      {/* salasanan lomake */}
       {showPasswordForm && (
         <Paper sx={{ mt: 3, p: 3}}>
-          <Typography variant="h6" gutterBottom>Change Password</Typography>
+          <Typography variant="h6" gutterBottom>Vaihda salasana</Typography>
           <TextField
             fullWidth
-            label="Current Password"
+            label="Nykyinen salalsana"
             type="password"
             margin="normal"
             value={currentPassword}
@@ -346,7 +344,7 @@ function Profile() {
           />
           <TextField
             fullWidth
-            label="New Password"
+            label="Uusi salasana"
             type="password"
             margin="normal"
             value={newPassword}
@@ -376,7 +374,7 @@ function Profile() {
           color: theme.palette.text.primary,
           borderColor: theme.palette.text.primary,
         }} onClick={handlePasswordChange}>
-            Update Password
+            Päivitä salasana
           </Button>
         </Paper>
       )}

@@ -14,7 +14,7 @@ function Footer() {
       }}
     >
       <Typography variant="body2" color="text.primary">
-      © 2025 SQL harjoittelutyökalu — Created by T. Räisänen
+      2025 SQL harjoittelutyökalu
       </Typography>
     </Box>
   );

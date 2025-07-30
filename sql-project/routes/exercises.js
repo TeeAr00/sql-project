@@ -16,7 +16,7 @@ module.exports = (db) => {
   router.post('/test-sets',authenticateToken, isAdmin , async (req, res) => {
   const { name, exerciseIds } = req.body;
   if (!name || !Array.isArray(exerciseIds)) {
-    return res.status(400).json({ error: 'Invalid input' });
+    return res.status(400).json({ error: 'Virheellinen' });
   }
 
   const conn = await db.promise().getConnection();
@@ -32,8 +32,8 @@ module.exports = (db) => {
     res.json({ id: testSetId, name });
   } catch (err) {
     await conn.rollback();
-    console.error('Error creating test set:', err);
-    res.status(500).json({ error: 'Database error' });
+    console.error('Virhe luodessa tehtäväsettiä:', err);
+    res.status(500).json({ error: 'Tietokanta virhe' });
   } finally {
     conn.release();
   }
@@ -45,7 +45,7 @@ module.exports = (db) => {
       const [rows] = await db.promise().query('SELECT * FROM test_sets');
       res.json(rows);
     } catch (err) {
-      res.status(500).json({ error: 'Database error' });
+      res.status(500).json({ error: 'Tietokanta virhe' });
     }
   });
 
@@ -59,7 +59,7 @@ module.exports = (db) => {
       );
       res.json(rows);
     } catch (err) {
-      res.status(500).json({ error: 'Database error' });
+      res.status(500).json({ error: 'Tietokanta virhe' });
     }
   });
 
@@ -69,15 +69,15 @@ module.exports = (db) => {
       const [rows] = await db.promise().query('SELECT id, description, class FROM exercises');
       res.json(rows);
     } catch (err) {
-      console.error('Error fetching exercises:', err);
-      res.status(500).json({ error: 'Database error' });
+      console.error('Virhe haettaessa tehtäviä:', err);
+      res.status(500).json({ error: 'Tietokanta virhe' });
     }
   });
   router.post('/',authenticateToken, isAdmin , async (req, res) => {
     const { description, expected_query, hint, class: exerciseClass } = req.body;
 
     if (!description || !expected_query || !exerciseClass) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: 'Täytä kaikki kentät' });
     }
 
     try {
@@ -88,8 +88,8 @@ module.exports = (db) => {
 
       res.status(201).json({ id: result.insertId });
     } catch (err) {
-      console.error('Error creating exercise:', err);
-      res.status(500).json({ error: 'Database error' });
+      console.error('Virhe luodessa tallennettaessa tehtävää:', err);
+      res.status(500).json({ error: 'Tietokanta virhe' });
     }
   });
 
@@ -99,12 +99,12 @@ module.exports = (db) => {
     try {
       const [rows] = await db.promise().query('SELECT * FROM exercises WHERE id = ?', [exerciseId]);
       if (rows.length === 0) {
-        return res.status(404).json({ error: 'Exercise not found' });
+        return res.status(404).json({ error: 'Tehtävää ei löytynyt' });
       }
       res.json(rows[0]);
     } catch (err) {
-      console.error('Error fetching exercise:', err);
-      res.status(500).json({ error: 'Database error' });
+      console.error('Virhe haettaessa tehtävää:', err);
+      res.status(500).json({ error: 'Tietokanta virhe' });
     }
   });
 
@@ -115,17 +115,17 @@ module.exports = (db) => {
 
 
     if (!userQuery) {
-      return res.status(400).json({ error: 'User query missing' });
+      return res.status(400).json({ error: 'Tyhä kenttä' });
     }
     if (!isSelectQuery(userQuery)) {
-      return res.status(400).json({ error: 'Only SELECT queries are allowed' });
+      return res.status(400).json({ error: 'Vain SELECT sallittu' });
     }
 
     try {
       // Hae odotettu kysely
       const [exerciseRows] = await db.promise().query('SELECT expected_query, class FROM exercises WHERE id = ?', [exerciseId]);
       if (exerciseRows.length === 0) {
-        return res.status(404).json({ error: 'Exercise not found' });
+        return res.status(404).json({ error: 'Tehtävää ei löytynyt' });
       }
       const expectedQuery = exerciseRows[0].expected_query;
 
@@ -145,8 +145,8 @@ module.exports = (db) => {
         actual: userRows
       });
     } catch (err) {
-      console.error('Error evaluating queries:', err);
-      res.status(500).json({ error: 'Database error or invalid query' });
+      console.error('Virhe vertailussa:', err);
+      res.status(500).json({ error: 'Tietokanta virhe' });
     }
   });
 

@@ -39,10 +39,10 @@ function NavBar() {
     >
       <Toolbar>
         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-          SQL Laboratory
+          SQL
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Tooltip title={muted ? 'Unmute Sounds' : 'Mute Sounds'}>
+          <Tooltip title={muted ? 'Poista mykistys' : 'Mykistä'}>
             <IconButton
               onClick={toggleMute}
               sx={{
@@ -55,7 +55,7 @@ function NavBar() {
               {muted ? <VolumeOffIcon /> : <VolumeUpIcon />}
             </IconButton>
           </Tooltip>
-          <Tooltip title="Toggle Theme">
+          <Tooltip title="Vaihda teema">
             <IconButton
               onClick={toggleTheme}
               sx={{
@@ -78,7 +78,7 @@ function NavBar() {
               },
             }}
           >
-            Profile
+            Profiili
           </Button>
           <Button
             onClick={handleLogout}
@@ -89,7 +89,7 @@ function NavBar() {
               },
             }}
           >
-            Logout
+            Kirjaudu ulos
           </Button>
         </Box>
       </Toolbar>

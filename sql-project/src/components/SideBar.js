@@ -32,12 +32,12 @@ function SideBar() {
   }, []);
 
   const menuItems = [
-    { text: 'Home', path: '/Home' },
-    { text: 'Questions', path: '/questions' },
-    { text: 'Results', path: '/scores' },
+    { text: 'Aloitus', path: '/Home' },
+    { text: 'Tehtävät', path: '/questions' },
+    { text: 'Tulokset', path: '/scores' },
     ...(isAdmin ? [
-    { text: 'New Test', path: '/newTests' },
-    { text: 'Edit Sets', path: '/editSets' },
+    { text: 'Uusi tehtäväsetti', path: '/newTests' },
+    { text: 'Muokkaa tehtäväsettejä', path: '/editSets' },
   ] : []),
   ];
 

@@ -52,10 +52,10 @@ function Register() {
     >
       <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: 'background.default', color: 'text.primary' }}>
         <Typography variant="h5" sx={{ mb: 2 }}>
-          Register
+          Rekisteröinti
         </Typography>
         <TextField
-          label="Username"
+          label="Käyttäjänimi"
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
@@ -65,7 +65,7 @@ function Register() {
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
-          label="Email"
+          label="Sähköposti"
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
@@ -75,7 +75,7 @@ function Register() {
           onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
-          label="Password"
+          label="Salasana"
           type="password"
           variant="filled"
           fullWidth
@@ -86,7 +86,7 @@ function Register() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
-          label="Password again"
+          label="Salasana uudestaan"
           type="password"
           variant="filled"
           fullWidth
@@ -97,10 +97,10 @@ function Register() {
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <Button variant="contained" fullWidth onClick={handleRegister}sx={{ mb: 1 }}>
-          Register
+          Rekistedöidy
         </Button>
         <Button variant="contained" fullWidth onClick={() => navigate('/login')}>
-          Login
+          Kirjaudu
         </Button>
       </Paper>
     </Box>

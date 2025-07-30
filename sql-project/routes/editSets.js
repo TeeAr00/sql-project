@@ -24,8 +24,8 @@ module.exports = (db) => {
 
         res.json(setsWithExercises);
     } catch (err) {
-        console.error('Error fetching test sets with exercises:', err);
-        res.status(500).json({ error: 'Database error' });
+        console.error('Virhe haettaessa tehtäviä:', err);
+        res.status(500).json({ error: 'Tietokanta virhe' });
     }
     });
     
@@ -41,14 +41,14 @@ module.exports = (db) => {
         await conn.commit();
 
         if (result.affectedRows === 0) {
-        return res.status(404).json({ error: 'Test set not found' });
+        return res.status(404).json({ error: 'TEhtäväsettiä ei löytynyt' });
         }
 
-        res.json({ message: 'Test set deleted successfully' });
+        res.json({ message: 'TEhtävä setti poistettu' });
     } catch (err) {
         await conn.rollback();
-        console.error('Error deleting test set:', err);
-        res.status(500).json({ error: 'Database error' });
+        console.error('Virhe poistaessa settiä:', err);
+        res.status(500).json({ error: 'Tietokanta virhe' });
     } finally {
         conn.release();
     }

@@ -8,13 +8,13 @@ module.exports = (db2) => {
     const { username, email, password } = req.body;
     //tyhjät kentät pois
     if (!username || !email || !password || username.trim() === '' || email.trim() === '' || password.trim() === '') {
-      return res.status(400).json({ message: 'All fields (username, email, password) are required and cannot be empty' });
+      return res.status(400).json({ message: 'Täytä kaikki kentät' });
     }
 
     try {
       const [rows] = await db2.promise().query('SELECT * FROM users WHERE username = ?', [username]);
       if (rows.length > 0) {
-        return res.status(400).json({ message: 'Username already exists' });
+        return res.status(400).json({ message: 'Käyttäjä on jo käytössä' });
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -23,10 +23,10 @@ module.exports = (db2) => {
         .promise()
         .query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword]);
 
-      res.status(201).json({ message: 'User registered successfully' });
+      res.status(201).json({ message: 'Käyttäjä rekisteröity' });
     } catch (error) {
-      console.error('Registration error:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error('Virhe rekisteröityessä:', error);
+      res.status(500).json({ message: 'Serveri virhe' });
     }
   });
 

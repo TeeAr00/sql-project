@@ -16,13 +16,13 @@ module.exports = (db2) => {
       );
 
       if (rows.length === 0) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'Käyttäjää ei löytynyt' });
       }
 
       res.json(rows[0]);
     } catch (error) {
-      console.error('Profile error:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error('Profiili virhe:', error);
+      res.status(500).json({ message: 'Serveri virhe' });
     }
   });
 
@@ -38,13 +38,13 @@ module.exports = (db2) => {
       );
 
       if (rows.length === 0) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(404).json({ message: 'Käyttäjää ei löytynyt' });
       }
 
       const user = rows[0];
       const passwordMatch = await bcrypt.compare(currentPassword, user.password);
       if (!passwordMatch) {
-        return res.status(403).json({ message: 'Current password is incorrect' });
+        return res.status(403).json({ message: 'Nykyinen salasana väärin' });
       }
 
       const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -53,10 +53,10 @@ module.exports = (db2) => {
         [hashedPassword, userId]
       );
 
-      res.json({ message: 'Password updated successfully' });
+      res.json({ message: 'Salasana päivitetty' });
     } catch (error) {
-      console.error('Change password error:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error('Virhe vaihtaessa salasanaa:', error);
+      res.status(500).json({ message: 'Serveri virhe' });
     }
   });
 
@@ -71,10 +71,10 @@ module.exports = (db2) => {
         [newEmail, userId]
       );
 
-      res.json({ message: 'Email updated successfully' });
+      res.json({ message: 'Sähköposti vaihdettu' });
     } catch (error) {
-      console.error('Change email error:', error);
-      res.status(500).json({ message: 'Server error' });
+      console.error('Virhe vaitaessa sähköpostia:', error);
+      res.status(500).json({ message: 'Serveri virhe' });
     }
   });
 

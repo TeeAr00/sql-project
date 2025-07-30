@@ -19,9 +19,9 @@ function LoginPage() {
 
     if (!response.ok) {
       if (response.status === 400) {
-          alert('Check your username and password');
+          alert('Tarkasta käyttäjänimi ja salasana');
         } else {
-          alert('Login failed. Please try again.');
+          alert('Virhe kirjautumisessa. Kokeile uudestaan.');
         }
       return;
     }
@@ -35,7 +35,7 @@ function LoginPage() {
       console.error('No token received from login');
     }
   } catch (error) {
-    console.error('Error during login:', error);
+    console.error('Virhe kirjautumisessa:', error);
   }
 };
 
@@ -52,10 +52,10 @@ function LoginPage() {
       <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: 'background.default', color: '#fff' }}>
         <Typography variant="h5" sx={{ mb: 2,color: theme.palette.text.primary,
           borderColor: theme.palette.text.primary, }}>
-          Login
+          Kirjautuminen
         </Typography>
         <TextField
-          label="Username"
+          label="Käyttäjänimi"
           variant="filled"
           fullWidth
           sx={{ mb: 2 }}
@@ -65,7 +65,7 @@ function LoginPage() {
           onChange={(e) => setUsername(e.target.value)}
         />
         <TextField
-          label="Password"
+          label="Salasana"
           type="password"
           variant="filled"
           fullWidth
@@ -76,10 +76,10 @@ function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button variant="contained" fullWidth onClick={handleLogin}sx={{ mb: 1 }}>
-          Login
+          Kirjaudu
         </Button>
         <Button variant="contained" fullWidth onClick={() => navigate('/register')}>
-          Register
+          Rekisteröinti
         </Button>
       </Paper>
     </Box>
