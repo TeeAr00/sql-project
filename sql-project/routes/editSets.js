@@ -53,5 +53,27 @@ module.exports = (db) => {
         conn.release();
     }
     });
+
+    router.put('/exercises/:id', authenticateToken, isAdmin, async (req, res) => {
+    const { id } = req.params;
+    const { description, expected_query, hint, class: className } = req.body;
+
+    try {
+        const [result] = await db.promise().query(
+        `UPDATE exercises SET description = ?, expected_query = ?, hint = ?, class = ? WHERE id = ?`,
+        [description, expected_query, hint, className, id]
+        );
+
+        if (result.affectedRows === 0) {
+        return res.status(404).json({ error: 'Tehtävää ei löydy' });
+        }
+
+        res.json({ message: 'Tehtävä tallennettu' });
+    } catch (err) {
+        console.error('Virhe tallentaessa:', err);
+        res.status(500).json({ error: 'Tietokantavirhe' });
+    }
+    });
+
 return router;
 }

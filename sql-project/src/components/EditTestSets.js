@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Box, Typography, Paper, Button, List, ListItem, ListItemText, Divider, useTheme } from '@mui/material';
+import { Box, Typography, Paper, Button, List, ListItem, ListItemText, Divider, useTheme, TextField,} from '@mui/material';
 
 function EditTestSets() {
   const [sets, setSets] = useState([]);
@@ -10,6 +10,8 @@ function EditTestSets() {
   const token = localStorage.getItem('authToken');
   const authHeader = { 'Authorization': `Bearer ${token}` };
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editedExercise, setEditedExercise] = useState(null);
 
 
   useEffect(() => {
@@ -44,11 +46,35 @@ function EditTestSets() {
       });
   };
   const handleExerciseClick = (exerciseId) => {
-    fetch(`http://localhost:5000/api/exercises/${exerciseId}`, { headers: authHeader })
-      .then(res => res.json())
-      .then(data => setSelectedExercise(data))
-      .catch(err => console.error('Virhe tehtävienhaussa:', err));
-  };
+  fetch(`http://localhost:5000/api/exercises/${exerciseId}`, { headers: authHeader })
+    .then(res => res.json())
+    .then(data => {
+      setSelectedExercise(data);
+      setEditedExercise(data);
+      setEditMode(false);
+    })
+    .catch(err => console.error('Virhe haettaessa tehtävää:', err));
+};
+
+const handleSaveEdit = () => {
+  fetch(`http://localhost:5000/api/editSets/exercises/${selectedExercise.id}`, {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json',
+    ...authHeader
+  },
+  body: JSON.stringify(editedExercise)
+})
+    .then(res => {
+      if (!res.ok) throw new Error('Virhe tallentaessa tehtävää');
+      return res.json();
+    })
+    .then(data => {
+      setSelectedExercise(editedExercise);
+      setEditMode(false);
+    })
+    .catch(err => console.error('Virhe tallentaessa tehtävää:', err));
+};
 
   return (
     <Box sx={{ p: 4, maxWidth: 800, mx: 'auto' }}>
@@ -123,12 +149,53 @@ function EditTestSets() {
 
       {selectedExercise && (
         <Paper sx={{ p: 3, mt: 3, backgroundColor: theme.palette.background.paper }}>
-          <Typography variant="h6" gutterBottom>Tehtävän tiedot</Typography>
-          <Typography><strong>ID:</strong> {selectedExercise.id}</Typography>
-          <Typography><strong>Description:</strong> {selectedExercise.description}</Typography>
-          <Typography><strong>Expected Query:</strong> {selectedExercise.expected_query}</Typography>
-          <Typography><strong>Hint:</strong> {selectedExercise.hint || 'No hint provided'}</Typography>
-          <Typography><strong>Class:</strong> {selectedExercise.class}</Typography>
+          <Typography variant="h6" gutterBottom>Valittu tehtävä</Typography>
+
+          {editMode ? (
+            <>
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Description"
+                value={editedExercise.description}
+                onChange={(e) => setEditedExercise({ ...editedExercise, description: e.target.value })}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Expected Query"
+                value={editedExercise.expected_query}
+                onChange={(e) => setEditedExercise({ ...editedExercise, expected_query: e.target.value })}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Hint"
+                value={editedExercise.hint}
+                onChange={(e) => setEditedExercise({ ...editedExercise, hint: e.target.value })}
+              />
+              <TextField
+                fullWidth
+                margin="normal"
+                label="Class"
+                value={editedExercise.class}
+                onChange={(e) => setEditedExercise({ ...editedExercise, class: e.target.value })}
+              />
+              <Box sx={{ mt: 2 }}>
+                <Button variant="contained" color="primary" onClick={handleSaveEdit}>Tallenna</Button>
+                <Button sx={{ ml: 2 }} variant="outlined" onClick={() => setEditMode(false)}>Peruuta</Button>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Typography><strong>ID:</strong> {selectedExercise.id}</Typography>
+              <Typography><strong>Description:</strong> {selectedExercise.description}</Typography>
+              <Typography><strong>Expected Query:</strong> {selectedExercise.expected_query}</Typography>
+              <Typography><strong>Hint:</strong> {selectedExercise.hint || 'No hint provided'}</Typography>
+              <Typography><strong>Class:</strong> {selectedExercise.class}</Typography>
+              <Button sx={{ mt: 2 }} variant="outlined" onClick={() => setEditMode(true)}>Muokkaa</Button>
+            </>
+          )}
         </Paper>
       )}
     </Box>
