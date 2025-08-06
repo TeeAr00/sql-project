@@ -1,6 +1,15 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Box, Typography, Paper, Button, List, ListItem, ListItemText, Divider, useTheme, TextField,} from '@mui/material';
+import { Box, Typography, Paper, Button, List, ListItem, ListItemText, Divider, useTheme, TextField, MenuItem,} from '@mui/material';
+
+const classOptions = [
+  { value: 1, label: 'SELECT' },
+  { value: 2, label: 'WHERE' },
+  { value: 3, label: 'ORDER BY' },
+  { value: 4, label: 'JOIN' },
+  { value: 5, label: 'COUNT' },
+  { value: 6, label: 'SUBQUERY' }
+];
 
 function EditTestSets() {
   const [sets, setSets] = useState([]);
@@ -176,11 +185,18 @@ const handleSaveEdit = () => {
               />
               <TextField
                 fullWidth
+                select
                 margin="normal"
                 label="Class"
                 value={editedExercise.class}
                 onChange={(e) => setEditedExercise({ ...editedExercise, class: e.target.value })}
-              />
+              >
+                {classOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
               <Box sx={{ mt: 2 }}>
                 <Button variant="contained" color="primary" onClick={handleSaveEdit}>Tallenna</Button>
                 <Button sx={{ ml: 2 }} variant="outlined" onClick={() => setEditMode(false)}>Peruuta</Button>
