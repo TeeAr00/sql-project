@@ -257,10 +257,9 @@ function Questions() {
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, flexWrap: 'wrap', mt: 4 }}>
           {exercises.map((ex, index) => {
             const exId = ex.id;
-            const hasAttempt = attempts[exId]?.tried;
+            const isAnswered = attempts[exId]?.correctFirstTry;
             const isNext = index === 0 || exercises[index - 1]?.id in attempts;
-
-            const isDisabled = !isNext;
+            const isDisabled = isAnswered || !isNext;
 
             return (
               <motion.div
@@ -275,7 +274,9 @@ function Questions() {
                 <Button
                   variant="contained"
                   disabled={isDisabled}
-                  sx={{ px: 4, py: 2, opacity: isDisabled ? 0.5 : 1 }}
+                  sx={{
+                    px: 4, py: 2, opacity: isDisabled ? 0.5 : 1, backgroundColor: isAnswered ? 'grey.500' : undefined,
+                  }}
                 >
                   {`Q${ex.id}: ${classLabels[ex.class] || 'Other'}`}
                 </Button>
