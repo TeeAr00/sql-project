@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Typography, Box, Button, TextField, Paper, CircularProgress } from '@mui/material';
 import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { motion, AnimatePresence } from 'framer-motion';
 import useSound from 'use-sound';
 import { useSoundControl } from './SoundContext';
+import { UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom';
 
 import er_diagram from '../assets/er_diagrammi.png';
 import correctSfx from '../assets/correct.mp3';
@@ -57,6 +58,23 @@ function Questions() {
   //   }
   //   fetchExercises();
   // }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (selectedTestSet && !testSetCompleted) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [selectedTestSet, testSetCompleted]);
+
+  useConfirmNavigation(
+    !!selectedTestSet && !testSetCompleted,
+    'Tehtäväsetti kesken. Poistutaanko sivulta?'
+  );
 
   useEffect(() => {
     async function fetchTestSets() {
@@ -190,7 +208,6 @@ function Questions() {
 
       if (isCorrect) {
         playCorrect();
-        // Move to next exercise after short delay
         setTimeout(() => {
           const nextIndex = currentExerciseIndex + 1;
           if (nextIndex < exercises.length) {
@@ -431,7 +448,7 @@ function Questions() {
             },
           })}
           onClick={() => setSelectedExercise(null)}>
-            &larr; Takaisin harjoituslistaan
+            &larr; Takaisin
           </Button>
         </motion.div>
       </motion.div>
@@ -440,3 +457,23 @@ function Questions() {
 }
 
 export default Questions;
+
+function useConfirmNavigation(when, message = 'Poistutaanko sivulta? Edistyminen menetetään.') {
+  const navigator = useContext(NavigationContext).navigator;
+
+  useEffect(() => {
+    if (!when) return;
+
+    const originalPush = navigator.push;
+
+    navigator.push = (...args) => {
+      if (window.confirm(message)) {
+        originalPush.apply(navigator, args);
+      }
+    };
+
+    return () => {
+      navigator.push = originalPush;
+    };
+  }, [when, message, navigator]);
+}
