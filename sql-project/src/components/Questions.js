@@ -34,6 +34,8 @@ function Questions() {
   const [testSetCompleted, setTestSetCompleted] = useState(false);
   const [attempts, setAttempts] = useState({});
   const scoreSavedRef = useRef(false);
+  const [initialHint, setInitialHint] = useState('');
+  const [hintType, setHintType] = useState('initial');
 
 
 
@@ -174,6 +176,8 @@ function Questions() {
       setUserQuery('');
       setFeedback(null);
       setShowHint(false);
+      setInitialHint(data.hint || 'Ei vinkkiä saatavilla');
+      setHintType('initial');
     } catch (err) {
       console.error('Virhe haettaessa harjoitusta:', err);
     }
@@ -203,7 +207,7 @@ function Questions() {
             }
           };
         });
-
+      setShowHint(false);
       setFeedback(isCorrect ? ' Oikein!' : ' Tarkista kyselysi');
 
       if (isCorrect) {
@@ -216,7 +220,7 @@ function Questions() {
             setSelectedExercise(nextExercise);
             setUserQuery('');
             setFeedback(null);
-            setShowHint(false);
+            setHintType('initial');
           } else {  
             setTestSetCompleted(true);
             setFeedback('Tehtäväsetti suoritettu!');
@@ -225,6 +229,7 @@ function Questions() {
         }, 1500);
       } else {
         playWrong();
+        setHintType('expected');
       }
     } catch (err) {
       console.error('Virhe tarkistuksessa:', err);
@@ -403,7 +408,7 @@ function Questions() {
 
         {showHint && (
           <Paper sx={{ mt: 2, p: 2, bgcolor: 'background.default', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
-            {selectedExercise.expected_query}
+            {hintType === 'initial' ? initialHint : selectedExercise.expected_query}
           </Paper>
         )}
 
