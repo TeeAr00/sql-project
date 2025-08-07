@@ -54,14 +54,25 @@ module.exports = (db) => {
     }
     });
 
+    function isSelectQuery(query) {
+        if (!query) return false;
+        const trimmed = query.trim().toUpperCase();
+        return trimmed.startsWith('SELECT');
+    }
     router.put('/exercises/:id', authenticateToken, isAdmin, async (req, res) => {
     const { id } = req.params;
     const { description, expected_query, hint, class: className } = req.body;
 
+    if (!description || !expected_query || !className) {
+        return res.status(400).json({ error: 'Täytä kaikki kentät' });
+    }
+    if (!isSelectQuery(expected_query)) {
+        return res.status(400).json({ error: 'expected_query voi olla vain SELECT-lause' });
+    }
     try {
         const [result] = await db.promise().query(
         `UPDATE exercises SET description = ?, expected_query = ?, hint = ?, class = ? WHERE id = ?`,
-        [description, expected_query, hint, className, id]
+        [description, expected_query, hint || '', className, id]
         );
 
         if (result.affectedRows === 0) {

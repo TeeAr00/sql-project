@@ -21,6 +21,7 @@ function EditTestSets() {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [editedExercise, setEditedExercise] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
 
 
   useEffect(() => {
@@ -66,6 +67,7 @@ function EditTestSets() {
 };
 
 const handleSaveEdit = () => {
+  setErrorMessage('');
   fetch(`http://localhost:5000/api/editSets/exercises/${selectedExercise.id}`, {
   method: 'PUT',
   headers: {
@@ -74,15 +76,22 @@ const handleSaveEdit = () => {
   },
   body: JSON.stringify(editedExercise)
 })
-    .then(res => {
-      if (!res.ok) throw new Error('Virhe tallentaessa tehtävää');
+    .then(async res => {
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Virhe tallentaessa tehtävää');
+      }
       return res.json();
     })
     .then(data => {
       setSelectedExercise(editedExercise);
       setEditMode(false);
+      setErrorMessage('');
     })
-    .catch(err => console.error('Virhe tallentaessa tehtävää:', err));
+    .catch(err => {
+      console.error('Virhe tallentaessa tehtävää:', err);
+      setErrorMessage(err.message);
+    });
 };
 
   return (
@@ -162,6 +171,11 @@ const handleSaveEdit = () => {
 
           {editMode ? (
             <>
+              {errorMessage && (
+                <Typography color="error" sx={{ mt: 2 }}>
+                  {errorMessage}
+                </Typography>
+              )}
               <TextField
                 fullWidth
                 margin="normal"
