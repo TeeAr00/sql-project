@@ -16,6 +16,7 @@ import Auth from './Auth';
 import NewTests from './NewTests';
 import EditTestSets from './EditTestSets';
 import Scores from './Scores';
+import SandboxTests from './SandboxTests';
 
 //Databasen testaukseen + roolin varmennuksen testaus
 function HomePage() {
@@ -145,6 +146,16 @@ function App() {
             <Auth>
               <MainLayout>
                 <Scores />
+              </MainLayout>
+            </Auth>
+          }
+        />
+        <Route
+          path="/sandboxTests"
+          element={
+            <Auth>
+              <MainLayout>
+                <SandboxTests />
               </MainLayout>
             </Auth>
           }

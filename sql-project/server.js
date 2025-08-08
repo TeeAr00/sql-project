@@ -34,6 +34,7 @@ const loginRouter = require('./routes/login')(db2);
 const profileRouter = require('./routes/profile')(db2);
 const editSetsRouter = require('./routes/editSets')(db,db2);
 const scoresRouter = require('./routes/scores')(db,db2);
+const sandboxTestsRouter = require('./routes/sandboxTests')(db);
 
 
 const app = express();
@@ -47,6 +48,7 @@ app.use('/api/login', loginRouter);
 app.use('/api/profile', profileRouter);
 app.use('/api/editSets', editSetsRouter);
 app.use('/api/scores', scoresRouter);
+app.use('/api/sandboxTests', sandboxTestsRouter);
 
 
 app.listen(PORT, () => {
