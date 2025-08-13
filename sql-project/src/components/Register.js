@@ -11,7 +11,7 @@ function Register() {
 
   const handleRegister = async () => {
   if (password !== confirmPassword) {
-    alert("Passwords don't match");
+    alert("Salasanat eivät täsmää");
     return;
   }
 
@@ -29,14 +29,14 @@ function Register() {
     const data = await response.json();
 
     if (!response.ok) {
-      alert(data.message || 'Registration failed');
+      alert(data.message || 'Virhe rekisteröinnissä');
       return;
     }
 
     navigate('/');
   } catch (error) {
-    console.error('Registration error:', error);
-    alert('Something went wrong during registration');
+    console.error('Virhe rekisteröisnnissä:', error);
+    alert('Jotain meni pieleen rekisteröinnissä');
   }
 };
 

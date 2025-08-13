@@ -6,6 +6,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { jwtDecode } from 'jwt-decode';
 
+//tehtävän tarkennus
 const classOptions = [
   { value: 1, label: 'SELECT' },
   { value: 2, label: 'WHERE' },
@@ -18,7 +19,7 @@ const classOptions = [
 function NewTests() {
   const [testSetName, setTestSetName] = useState('');
   const [exercises, setExercises] = useState([
-    { description: '', expected_query: '', hint: '', class: '' }
+    { description: '', expected_query: '', hint: '', class: '' }    //uuden tehtävän tiedot
   ]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -27,6 +28,7 @@ function NewTests() {
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem('authToken');
 
+  //käyttäjän oikeuksien tarkastus
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
@@ -71,7 +73,7 @@ function NewTests() {
     try {
       setSaving(true);
       const savedExerciseIds = [];
-
+      //Tehtävien tallennus
       for (const ex of exercises) {
         const res = await fetch('http://localhost:5000/api/exercises', {
           method: 'POST',
@@ -85,7 +87,7 @@ function NewTests() {
         if (!data.id) throw new Error('Virhe tallennettaessa tehtävää');
         savedExerciseIds.push(data.id);
       }
-
+      //Tehtäväsetin tallennus
       const res = await fetch('http://localhost:5000/api/exercises/test-sets', {
         method: 'POST',
         headers: {

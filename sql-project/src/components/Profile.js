@@ -4,10 +4,10 @@ import { useThemeToggle } from './ThemeContext';
 import { useTheme } from '@mui/material/styles';
 
 function Profile() {
-  const [userData, setUserData] = useState({ username: '', email: '' });
+  const [userData, setUserData] = useState({ username: '', email: '' });   //Käyttäjän tiedot backendistä
   
   const [showEmailForm, setShowEmailForm] = useState(false);
-  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);        // sposti ja salasana lomakkeet
 
   const [oldEmail, setOldEmail] = useState('');
   const [newEmail, setNewEmail] = useState('');
@@ -19,6 +19,7 @@ function Profile() {
   const { mode, toggleTheme } = useThemeToggle();
   const theme = useTheme();
 
+  //Käyttäjätietojen haku
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -47,6 +48,7 @@ function Profile() {
     fetchProfile();
   }, []);
 
+  //Sähköpostin kenttien tarkastus ja sähköpostin vaihto
   const handleEmailChange = async () => {
     if (oldEmail !== userData.email) {
       alert('Vanha sähköposti ei täsmää.');
@@ -86,6 +88,7 @@ function Profile() {
     }
   };
 
+  //Salasanan kenttien tarkastus ja salasanan vaihto
   const handlePasswordChange = async () => {
     if (!currentPassword || !newPassword) {
       alert('Täytä molemmat salasanakentät.');

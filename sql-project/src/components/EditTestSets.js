@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Box, Typography, Paper, Button, List, ListItem, ListItemText, Divider, useTheme, TextField, MenuItem,} from '@mui/material';
 
+//Tehtävätyypin tarkennus
 const classOptions = [
   { value: 1, label: 'SELECT' },
   { value: 2, label: 'WHERE' },
@@ -14,13 +15,13 @@ const classOptions = [
 function EditTestSets() {
   const [sets, setSets] = useState([]);
   const [selectedSetId, setSelectedSetId] = useState(null);
-  const [selectedSetExercises, setSelectedSetExercises] = useState([]);
+  const [selectedSetExercises, setSelectedSetExercises] = useState([]); //settien ja tehtävän tiedot
   const theme = useTheme();
   const token = localStorage.getItem('authToken');
   const authHeader = { 'Authorization': `Bearer ${token}` };
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [editedExercise, setEditedExercise] = useState(null);
+  const [editMode, setEditMode] = useState(false);                      //muokkaustila
+  const [editedExercise, setEditedExercise] = useState(null);           //muokatun tehtävän data
   const [errorMessage, setErrorMessage] = useState('');
 
 
@@ -31,12 +32,14 @@ function EditTestSets() {
       .catch(err => console.error('Virhe haettaessa tehtäväsettejä:', err));
   }, []);
 
+  // setin valinta ja tehtävien latuas
   const handleSetClick = (id) => {
     setSelectedSetId(id);
     const selectedSet = sets.find(set => set.id === id);
     setSelectedSetExercises(selectedSet?.exercises || []);
   };
 
+  // Tehtäväsetin poisto. (lisää backissa tehtäväsettiin kuuluvien tehtävien poisto myös)
   const handleDelete = (id) => {
     if (!window.confirm('Poistetaanko tehtäväsetti?')) return;
     fetch(`http://localhost:5000/api/editSets/${id}`, {

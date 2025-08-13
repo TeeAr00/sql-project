@@ -11,6 +11,7 @@ import er_diagram from '../assets/er_diagrammi.png';
 import correctSfx from '../assets/correct.mp3';
 import wrongSfx from '../assets/wrong.mp3';
 
+//Kysymystyypin tarkennus joka näkyy setin sisällä
 const classLabels = {
   1: 'SELECT',
   2: 'WHERE',
@@ -21,20 +22,20 @@ const classLabels = {
 };
 
 function Questions() {
-  const [testSets, setTestSets] = useState([]);
+  const [testSets, setTestSets] = useState([]);                           //testisetit databasesta
   const [selectedTestSet, setSelectedTestSet] = useState(null);
-  const [exercises, setExercises] = useState([]);
+  const [exercises, setExercises] = useState([]);                         //tehtävät setistä
   const [loading, setLoading] = useState(true);
-  const [selectedExercise, setSelectedExercise] = useState(null);
-  const [userQuery, setUserQuery] = useState('');
+  const [selectedExercise, setSelectedExercise] = useState(null);         //Aktiivinen tehtävä
+  const [userQuery, setUserQuery] = useState('');                         //Kysely käyttäjältä
   const [showHint, setShowHint] = useState(false);
   const [feedback, setFeedback] = useState(null);
   const [showImage, setShowImage] = useState(false);
-  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);    //nykyisen tehtävän numero
   const [testSetCompleted, setTestSetCompleted] = useState(false);
-  const [attempts, setAttempts] = useState({});
-  const scoreSavedRef = useRef(false);
-  const [initialHint, setInitialHint] = useState('');
+  const [attempts, setAttempts] = useState({});                           //yrityset tehtävään
+  const scoreSavedRef = useRef(false);                                    //tehtävän tallenuksen moneenkertaan estoon
+  const [initialHint, setInitialHint] = useState('');                     // Tehtävän vihjeen vaihtoon, aluksi hint, toisella kerralla expected_query
   const [hintType, setHintType] = useState('initial');
 
 
@@ -61,6 +62,7 @@ function Questions() {
   //   fetchExercises();
   // }, []);
 
+  //Selaimella sivunvaihdon esto kun tehtäväsetti kesken. Tehtävän edistyminen katoaa, jos käyttäjä poistuu tehtävät sivulta
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (selectedTestSet && !testSetCompleted) {
@@ -73,6 +75,7 @@ function Questions() {
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   }, [selectedTestSet, testSetCompleted]);
 
+  //Navigointi eri komponentteihin estetty kun tehtäväsettikesken.
   useConfirmNavigation(
     !!selectedTestSet && !testSetCompleted,
     'Tehtäväsetti kesken. Poistutaanko sivulta?'
@@ -107,9 +110,11 @@ function Questions() {
   //   }
   // }
 
+  //Tuloksen tallennus kun tehtäväsetti tehty
   useEffect(() => {
   if (!testSetCompleted || scoreSavedRef.current) return;
-
+  
+    //Montako tehtävää ensimmäisellä yrittämällä oikein. ensimmäisellä = 1 piste, enemmän yrityksiä = ei pisteitä
     const correctFirstTries = Object.values(attempts).filter(a => a.correctFirstTry).length;
     const percentage = parseFloat(((correctFirstTries / exercises.length) * 100).toFixed(2));
     const token = localStorage.getItem('authToken');
@@ -238,6 +243,7 @@ function Questions() {
   }
 
 
+  //Testisetin valintaikkuna
   if (!selectedTestSet) {
     return (
       <Box sx={{ mt: 5, textAlign: 'center' }}>
@@ -255,6 +261,7 @@ function Questions() {
 
   if (loading) return <CircularProgress sx={{ mt: 5, display: 'block', mx: 'auto' }} />;
 
+  //Testisetti valittu, näyttää tehtävät setissä
   if (!selectedExercise) {
     return (
       <Box sx={{ mt: 5, textAlign: 'center' }}>
@@ -306,6 +313,7 @@ function Questions() {
     );
   }
 
+  //tehtävä valittu, kysymysikkuna
   return (
     <AnimatePresence mode="wait">
     {selectedExercise && (

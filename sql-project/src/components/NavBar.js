@@ -41,6 +41,7 @@ function NavBar() {
         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
           SQL
         </Typography>
+        {/* Mykistys */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Tooltip title={muted ? 'Poista mykistys' : 'Mykistä'}>
             <IconButton
@@ -55,6 +56,7 @@ function NavBar() {
               {muted ? <VolumeOffIcon /> : <VolumeUpIcon />}
             </IconButton>
           </Tooltip>
+          {/* Teeman vaihto */}
           <Tooltip title="Vaihda teema">
             <IconButton
               onClick={toggleTheme}

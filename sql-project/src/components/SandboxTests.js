@@ -16,7 +16,7 @@ function SandboxTests() {
   const [error, setError] = useState('');
   const [showImage, setShowImage] = useState(false);
   
-
+  //tietojen haku databasesta
   useEffect(() => {
     async function fetchTables() {
       try {
@@ -30,6 +30,7 @@ function SandboxTests() {
     fetchTables();
   }, []);
 
+  //Käyytäjän kyselyn lähetys
   async function runQuery() {
     setLoading(true);
     setError('');
@@ -70,6 +71,7 @@ function SandboxTests() {
 
       <Typography variant="h6">Pöydät:</Typography>
       <Paper sx={{ p: 2, mb: 3, fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+        {/* Taulut ja niiden rivimäärät */}
         {Object.entries(tables).map(([name, rows]) => (
           <div key={name}>
             <strong>{name}</strong> ({rows.length} riviä)
@@ -170,6 +172,7 @@ function SandboxTests() {
       {loading && <CircularProgress sx={{ mt: 2 }} />}
       {error && <Typography color="error" sx={{ mt: 2 }}>{error}</Typography>}
 
+      {/* Kyselyn tulosten näyttäminen */}
       {result && result.length > 0 && (
         <Paper sx={{ mt: 3, p: 2, bgcolor: 'background.default' }}>
             <Typography variant="h6" gutterBottom>

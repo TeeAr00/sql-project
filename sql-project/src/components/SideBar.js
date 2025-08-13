@@ -33,9 +33,9 @@ function SideBar() {
 
   const menuItems = [
     { text: 'Aloitus', path: '/Home' },
+    { text: 'Harjoittelu', path: '/sandboxTests' },
     { text: 'Tehtävät', path: '/questions' },
     { text: 'Tulokset', path: '/scores' },
-    { text: 'Harjoittelu', path: '/sandboxTests' },
     ...(isAdmin ? [
     { text: 'Uusi tehtäväsetti', path: '/newTests' },
     { text: 'Muokkaa tehtäväsettejä', path: '/editSets' },

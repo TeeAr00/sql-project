@@ -10,9 +10,10 @@ function Scores() {
   const [scores, setScores] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTests, setSelectedTests] = useState([]);
-  const [sortOption, setSortOption] = useState('date_desc');
+  const [sortOption, setSortOption] = useState('date_desc');  //Järjestyksen asetus
   const [openChartId, setOpenChartId] = useState(null);
 
+  //Pisteiden haku
   useEffect(() => {
     async function fetchScores() {
     const token = localStorage.getItem('authToken');
@@ -35,12 +36,15 @@ function Scores() {
     fetchScores();
   }, []);
 
+  //Listat eri tehtäväsettien nimistä (vaihdetaan idn perusteella, jos sattuu olemaan kaksi samannimistä settiä)
   const uniqueTestNames = [...new Set(scores.map(score => score.test_set_name))];
 
+  //Suodatetut pisteet
   const filteredScores = scores.filter(score =>
     selectedTests.length === 0 || selectedTests.includes(score.test_set_name)
   );
 
+  //tulosten järjestämisen valinnat
   const sortedScores = [...filteredScores].sort((a, b) => {
     if (sortOption === 'score_asc') return a.score - b.score;
     if (sortOption === 'score_desc') return b.score - a.score;
@@ -51,10 +55,12 @@ function Scores() {
     return 0;
   });
 
+  //tulosten seurannan kaavion näyttö
   const toggleChart = (scoreId) => {
     setOpenChartId(prev => prev === scoreId ? null : scoreId);
   };
 
+  // 5 edellistä testiä kaavioon
   const getLastScoresForTest = (testSetName) => {
     const testScores = scores
       .filter(s => s.test_set_name === testSetName)
@@ -71,8 +77,8 @@ function Scores() {
       <Typography variant="h4" gutterBottom>
         Suoritukset
       </Typography>
-
       <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', gap: 3, flexWrap: 'wrap' }}>
+        {/* Tehtäväsettien suodatus */}
         <Box>
           <Typography variant="body1" sx={{ mb: 1 }}>Suodata:</Typography>
           <Select
@@ -92,6 +98,7 @@ function Scores() {
         </Box>
 
         <Box>
+          {/* tehtäväsettien järjestäminen */}
           <Typography variant="body1" sx={{ mb: 1 }}>Järjestä:</Typography>
           <Select
             value={sortOption}
