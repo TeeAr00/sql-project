@@ -55,11 +55,17 @@ function HomePage() {
 
   return (
     <div>
-      <h2>Aula</h2>
       <ul>
-        {persons.map((person) => (
-          <li key={person.id}>{person.firstname}</li>
-        ))}
+        <h1>SQL-harjoitustila</h1>
+        <h2>Ominaisuudet</h2>
+        <h3>Käyttäjätilit:</h3>
+        <p>Rekisteröituminen, kirjautuminen, profiilin ja sivustoasetusten hallinta.</p>
+        <h3>SQL-harjoitustila:</h3>
+        <p>Testaa omia SQL-kyselyitä valmiista tietokannasta.</p>
+        <h3>Tehtäväpaketit:</h3>
+        <p>Käyttäjä voi suorittaa valmiita tehtäväpaketteja sekä seurata omaa edistymistään niissä.</p>
+        <h3>Admin-toiminnot:</h3>
+        <p>Tehtäväpakettien luominen, muokkaaminen ja poistaminen</p>
       </ul>
     </div>
   );
