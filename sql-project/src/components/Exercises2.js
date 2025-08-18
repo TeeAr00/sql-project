@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Paper, Typography, CircularProgress } from '@mui/material';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function Exercises2() {
   const [exercises, setExercises] = useState([]);
@@ -40,6 +40,12 @@ function Exercises2() {
     }
   }
 
+  function clearAssembled() {
+    setAvailable([...available, ...assembled]);
+    setAssembled([]);
+    setFeedback('');
+  }
+
   async function handleSubmit() {
     const res = await fetch(`http://localhost:5000/api/exercises2/${selectedExercise.id}/evaluate`, {
       method: 'POST',
@@ -65,6 +71,7 @@ function Exercises2() {
           <Button
             key={ex.id}
             variant="contained"
+            size ="large"
             sx={{ m: 1 }}
             onClick={() => startExercise(ex.id)}
           >
@@ -77,54 +84,163 @@ function Exercises2() {
 
   return (
     <Box sx={{ mt: 5, textAlign: 'center', maxWidth: 800, mx: 'auto' }}>
-      <Typography variant="h5" gutterBottom>{selectedExercise.description}</Typography>
+      <Typography variant="h5" gutterBottom fontWeight={600}>
+        {selectedExercise.description}
+      </Typography>
 
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Typography>Valittavissa olevat sanat:</Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-          {available.map((word, i) => (
-            <motion.div whileHover={{ scale: 1.05 }} key={i}>
-              <Button sx={(theme) => ({
-                color: theme.palette.text.primary,
-                borderColor: theme.palette.text.primary,
-                '&:hover': {
-                  backgroundColor: theme.palette.action.hover,
-                  borderColor: theme.palette.text.primary,
-                },
-              })} variant="outlined" onClick={() => pickWord(word, true)}>
-                {word}
-              </Button>
-            </motion.div>
-          ))}
-        </Box>
-      </Paper>
-
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Typography>Rakennettu kysely:</Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
-          {assembled.map((word, i) => (
-            <motion.div whileHover={{ scale: 1.05 }} key={i}>
-              <Button variant="contained" onClick={() => pickWord(word, false)}>
-                {word}
-              </Button>
-            </motion.div>
-          ))}
-        </Box>
-      </Paper>
-
-      <Button
-        variant="contained"
-        disabled={!assembled.length}
-        onClick={handleSubmit}
+      <Paper
+        elevation={3}
+        sx={{
+          p: 3,
+          mb: 3,
+          borderRadius: 3,
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark'
+              ? theme.palette.grey[900]
+              : theme.palette.grey[50],
+        }}
       >
-        Tarkista
-      </Button>
+        <Typography
+          variant="subtitle1"
+          gutterBottom
+          sx={{ borderBottom: 2, borderColor: 'divider', pb: 1, fontWeight: 600 }}
+        >
+          Valittavissa olevat sanat
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 1.5,
+          }}
+        >
+          <AnimatePresence>
+            {available.map((word, i) => (
+              <motion.div
+                key={word}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  variant="outlined"
+                  sx={(theme) => ({
+                    fontWeight: 600,
+                    borderRadius: '50px',
+                    borderWidth: 2,
+                    borderColor: theme.palette.text.primary,
+                    color: theme.palette.text.primary,
+                    minWidth: '120px',
+                    textTransform: 'none',
+                  })}
+                  onClick={() => pickWord(word, true)}
+                >
+                  {word}
+                </Button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </Box>
+      </Paper>
 
-      {feedback && <Typography sx={{ mt: 2 }}>{feedback}</Typography>}
+      <Paper
+        elevation={3}
+        sx={{
+          p: 3,
+          mb: 3,
+          borderRadius: 3,
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'dark'
+              ? theme.palette.grey[800]
+              : theme.palette.grey[100],
+        }}
+      >
+        <Typography
+          variant="subtitle1"
+          gutterBottom
+          sx={{ borderBottom: 2, borderColor: 'divider', pb: 1, fontWeight: 600 }}
+        >
+          Rakennettu kysely
+        </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 1.5,
+          }}
+        >
+          {assembled.map((word, i) => (
+            <motion.div
+              key={word + i}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+            >
+              <Button
+                variant="contained"
+                sx={{ minWidth: '120px', fontWeight: 600, borderRadius: '50px' }}
+                onClick={() => pickWord(word, false)}
+              >
+                {word}
+              </Button>
+            </motion.div>
+          ))}
+        </Box>
+      </Paper>
 
-      <Button sx={{ mt: 4 }} onClick={() => setSelectedExercise(null)}>
-        Takaisin
-      </Button>
+      <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            mb: 2,
+          }}
+        >
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={clearAssembled}
+            disabled={!assembled.length}
+          >
+            Tyhjennä
+          </Button>
+
+          <Button
+            variant="contained"
+            size="large"
+            disabled={!assembled.length}
+            onClick={handleSubmit}
+          >
+            Tarkista
+          </Button>
+        </Box>
+
+        <AnimatePresence>
+          {feedback && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+            >
+              {feedback}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => setSelectedExercise(null)}
+          >
+            Takaisin
+          </Button>
+        </Box>
+      </Box>
     </Box>
   );
 }
