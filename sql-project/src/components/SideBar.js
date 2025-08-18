@@ -35,6 +35,7 @@ function SideBar() {
     { text: 'Aloitus', path: '/Home' },
     { text: 'Harjoittelu', path: '/sandboxTests' },
     { text: 'Tehtävät', path: '/questions' },
+    { text: 'Tehtävät 2', path: '/exercises2' },
     { text: 'Tulokset', path: '/scores' },
     ...(isAdmin ? [
     { text: 'Uusi tehtäväsetti', path: '/newTests' },
