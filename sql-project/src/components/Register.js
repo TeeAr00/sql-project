@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -8,6 +10,7 @@ function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleRegister = async () => {
   if (password !== confirmPassword) {
@@ -47,62 +50,88 @@ function Register() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        bgcolor: 'background.default',
+        bgcolor: theme.palette.background.default,
       }}
     >
-      <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: 'background.default', color: 'text.primary' }}>
-        <Typography variant="h5" sx={{ mb: 2 }}>
-          Rekisteröinti
-        </Typography>
-        <TextField
-          label="Käyttäjänimi"
-          variant="filled"
-          fullWidth
-          sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
-          InputLabelProps={{ sx: { color: 'text.primary' } }}
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <TextField
-          label="Sähköposti"
-          variant="filled"
-          fullWidth
-          sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
-          InputLabelProps={{ sx: { color: 'text.primary' } }}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Salasana"
-          type="password"
-          variant="filled"
-          fullWidth
-          sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
-          InputLabelProps={{ sx: { color: 'text.primary' } }}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <TextField
-          label="Salasana uudestaan"
-          type="password"
-          variant="filled"
-          fullWidth
-          sx={{ mb: 3 }}
-          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
-          InputLabelProps={{ sx: { color: 'text.primary' } }}
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <Button variant="contained" fullWidth onClick={handleRegister}sx={{ mb: 1 }}>
-          Rekistedöidy
-        </Button>
-        <Button variant="contained" fullWidth onClick={() => navigate('/login')}>
-          Kirjaudu
-        </Button>
-      </Paper>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{ width: '100%', maxWidth: 360 }}
+      >
+        <Paper elevation={6} sx={{ p: 4, borderradius: 4, width: 300, bgcolor: theme.palette.background.default }}>
+          <Typography variant="h5" gutterBottom sx={{
+            mb: 2, fontweight: 'bold',
+            textAlign: "center",
+            color: theme.palette.text.primary,
+            borderColor: theme.palette.text.primary,
+          }}>
+            Rekisteröinti
+          </Typography>
+          <TextField
+            label="Käyttäjänimi"
+            variant="filled"
+            fullWidth
+            sx={{ mb: 2 }}
+            InputProps={{ sx: { bgcolor: theme.palette.background.default, color: theme.palette.text.primary } }}
+            InputLabelProps={{ sx: { color: theme.palette.text.primary } }}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <TextField
+            label="Sähköposti"
+            variant="filled"
+            fullWidth
+            sx={{ mb: 2 }}
+            InputProps={{ sx: { bgcolor: theme.palette.background.default, color: theme.palette.text.primary } }}
+            InputLabelProps={{ sx: { color: theme.palette.text.primary } }}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            label="Salasana"
+            type="password"
+            variant="filled"
+            fullWidth
+            sx={{ mb: 2 }}
+            InputProps={{ sx: { bgcolor: theme.palette.background.default, color: theme.palette.text.primary } }}
+            InputLabelProps={{ sx: { color: theme.palette.text.primary } }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            label="Salasana uudestaan"
+            type="password"
+            variant="filled"
+            fullWidth
+            sx={{ mb: 3 }}
+            InputProps={{ sx: { bgcolor: theme.palette.background.default, color: theme.palette.text.primary } }}
+            InputLabelProps={{ sx: { color: theme.palette.text.primary } }}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          <Button variant="outlined" fullWidth onClick={handleRegister}
+            sx={{
+              mb: 2,
+              py: 1.2,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 'bold',
+            }}>
+            Rekistedöidy
+          </Button>
+          <Button variant="outlined" fullWidth onClick={() => navigate('/login')}
+            sx={{
+              mb: 2,
+              py: 1.2,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 'bold',
+            }}>
+            Kirjaudu
+          </Button>
+        </Paper>
+      </motion.div>
     </Box>
   );
 }

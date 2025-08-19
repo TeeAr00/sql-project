@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -46,42 +47,75 @@ function LoginPage() {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        bgcolor: 'background.default',
+        bgcolor: theme.palette.background.default,
       }}
     >
-      <Paper elevation={6} sx={{ p: 4, width: 300, bgcolor: 'background.default', color: '#fff' }}>
-        <Typography variant="h5" sx={{ mb: 2,color: theme.palette.text.primary,
-          borderColor: theme.palette.text.primary, }}>
-          Kirjautuminen
-        </Typography>
-        <TextField
-          label="Käyttäjänimi"
-          variant="filled"
-          fullWidth
-          sx={{ mb: 2 }}
-          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
-          InputLabelProps={{ sx: { color: 'text.primary' } }}
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <TextField
-          label="Salasana"
-          type="password"
-          variant="filled"
-          fullWidth
-          sx={{ mb: 3 }}
-          InputProps={{ sx: { bgcolor: 'background.default', color: 'text.primary' } }}
-          InputLabelProps={{ sx: { color: 'text.primary' } }}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button variant="contained" fullWidth onClick={handleLogin}sx={{ mb: 1 }}>
-          Kirjaudu
-        </Button>
-        <Button variant="contained" fullWidth onClick={() => navigate('/register')}>
-          Rekisteröinti
-        </Button>
-      </Paper>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{ width: '100%', maxWidth: 360 }}
+      >
+        <Paper elevation={6} sx={{ p: 4, borderradius: 4, width: 300, bgcolor: theme.palette.background.default }}>
+          <Typography variant="h5" gutterBottom sx={{
+            mb: 2, fontweight: 'bold',
+            textAlign: "center",
+            color: theme.palette.text.primary,
+            borderColor: theme.palette.text.primary,
+          }}>
+            Kirjautuminen
+          </Typography>
+          <TextField
+            label="Käyttäjänimi"
+            variant="filled"
+            fullWidth
+            sx={{ mb: 2 }}
+            InputProps={{ sx: { bgcolor: theme.palette.background.default, color: theme.palette.text.primary } }}
+            InputLabelProps={{ sx: { color: theme.palette.text.primary } }}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <TextField
+            label="Salasana"
+            type="password"
+            variant="filled"
+            fullWidth
+            sx={{ mb: 3 }}
+            InputProps={{ sx: { bgcolor: theme.palette.background.default, color: theme.palette.text.primary } }}
+            InputLabelProps={{ sx: { color: theme.palette.text.primary } }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={handleLogin}
+            sx={{
+              mb: 2,
+              py: 1.2,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 'bold',
+            }}
+          >
+            Kirjaudu
+          </Button>
+          <Button
+            variant="outlined"
+            fullWidth
+            onClick={() => navigate('/register')}
+            sx={{
+              mb: 2,
+              py: 1.2,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 'bold',
+            }}
+          >
+            Rekisteröinti
+          </Button>
+        </Paper>
+      </motion.div>
     </Box>
   );
 }

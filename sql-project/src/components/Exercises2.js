@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Paper, Typography, CircularProgress } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
+import useSound from 'use-sound';
+import { useSoundControl } from './SoundContext';
+import correctSfx from '../assets/correct.mp3';
+import wrongSfx from '../assets/wrong.mp3';
 
 function Exercises2() {
   const [exercises, setExercises] = useState([]);
@@ -9,6 +13,10 @@ function Exercises2() {
   const [assembled, setAssembled] = useState([]);
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(true);
+
+  const { muted } = useSoundControl();
+  const [playCorrect] = useSound(correctSfx, { soundEnabled: !muted });
+  const [playWrong] = useSound(wrongSfx, { soundEnabled: !muted });
 
   // Tehtävälistan lataus
   useEffect(() => {
@@ -54,8 +62,10 @@ function Exercises2() {
     });
     const data = await res.json();
     if (data.correct) {
+      playCorrect();
       setFeedback('Oikein!');
     } else {
+      playWrong();
       setFeedback(`Tarkista sanat. `);
       //debug Odotettu kysely: ${data.expected_query}
     }
