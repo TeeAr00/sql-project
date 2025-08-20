@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Paper, Typography, CircularProgress } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, IconButton } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import useSound from 'use-sound';
 import { useSoundControl } from './SoundContext';
+import CloseIcon from '@mui/icons-material/Close';
+
+import er_diagram from '../assets/er_diagrammi.png';
 import correctSfx from '../assets/correct.mp3';
 import wrongSfx from '../assets/wrong.mp3';
 
@@ -13,6 +17,9 @@ function Exercises2() {
   const [assembled, setAssembled] = useState([]);
   const [feedback, setFeedback] = useState('');
   const [loading, setLoading] = useState(true);
+  const [hint, setHint] = useState('');
+  const [showHint, setShowHint] = useState(false);
+  const [showImage, setShowImage] = useState(false);
 
   const { muted } = useSoundControl();
   const [playCorrect] = useSound(correctSfx, { soundEnabled: !muted });
@@ -36,6 +43,8 @@ function Exercises2() {
     setAvailable(data.word_bank);
     setAssembled([]);
     setFeedback('');
+    setHint(data.hint);
+    setShowHint(false);
   }
 
   function pickWord(word, fromAvailable = true) {
@@ -218,6 +227,27 @@ function Exercises2() {
           >
             Tyhjennä
           </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => setShowHint(!showHint)}
+          >
+            Vihje
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => setShowImage((prev) => !prev)}
+            sx={(theme) => ({
+              color: theme.palette.text.primary,
+              borderColor: theme.palette.text.primary,
+              '&:hover': {
+                backgroundColor: theme.palette.action.hover,
+                borderColor: theme.palette.text.primary,
+              },
+            })}
+          >
+            {showImage ? 'Piilota er-kaavio' : 'Näytä er-kaavio'}
+          </Button>
 
           <Button
             variant="contained"
@@ -228,6 +258,41 @@ function Exercises2() {
             Tarkista
           </Button>
         </Box>
+        {showHint && (
+          <Typography
+            variant="subtitle1"
+            gutterBottom
+            sx={{ mt: 2}}
+          >
+             {hint ? hint : "Ei vihjettä saatavilla"}
+          </Typography>
+        )}
+        <Dialog open={showImage} onClose={() => setShowImage(false)} maxWidth="sm" fullWidth>
+          <DialogTitle sx={{ m: 0, p: 2 }}>
+            ER-Kaavio
+            <IconButton
+              aria-label="close"
+              onClick={() => setShowImage(false)}
+              sx={{
+                position: 'absolute',
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </DialogTitle>
+          <DialogContent dividers>
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <img
+                src={er_diagram}
+                alt="ER-diagrammi"
+                style={{ maxWidth: '100%', height: 'auto', borderRadius: '12px' }}
+              />
+            </Box>
+          </DialogContent>
+        </Dialog>
 
         <AnimatePresence>
           {feedback && (

@@ -32,7 +32,7 @@ module.exports = (db) => {
   //Kaikki kysymykset
   router.get('/', async (req, res) => {
     try {
-      const [rows] = await db.promise().query('SELECT id, description, class FROM exercises2');
+      const [rows] = await db.promise().query('SELECT id, description, hint, class FROM exercises2');
       res.json(rows);
     } catch (err) {
       console.error('Virhe haettaessa tehtäviä:', err);
