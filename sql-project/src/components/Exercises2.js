@@ -85,7 +85,22 @@ function Exercises2() {
   if (!selectedExercise) {
     return (
       <Box sx={{ mt: 5, textAlign: 'center' }}>
-        <Typography variant="h4">Valitse sana-järjestelytehtävä</Typography>
+        <Box>
+          <Typography variant="h4">Valitse sana-järjestelytehtävä</Typography>
+          {exercises.length > 0 && (
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ m: 2 }}
+              onClick={() => {
+                const randomIndex = Math.floor(Math.random() * exercises.length);
+                startExercise(exercises[randomIndex].id);
+              }}
+            >
+              Satunnainen tehtävä
+            </Button>
+          )}
+        </Box>
         {exercises.map(ex => (
           <Button
             key={ex.id}
@@ -236,15 +251,8 @@ function Exercises2() {
           </Button>
           <Button
             variant="outlined"
+            size="large"
             onClick={() => setShowImage((prev) => !prev)}
-            sx={(theme) => ({
-              color: theme.palette.text.primary,
-              borderColor: theme.palette.text.primary,
-              '&:hover': {
-                backgroundColor: theme.palette.action.hover,
-                borderColor: theme.palette.text.primary,
-              },
-            })}
           >
             {showImage ? 'Piilota er-kaavio' : 'Näytä er-kaavio'}
           </Button>
@@ -308,7 +316,7 @@ function Exercises2() {
 
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
           <Button
-            variant="contained"
+            variant="outlined"
             size="large"
             onClick={() => setSelectedExercise(null)}
           >
