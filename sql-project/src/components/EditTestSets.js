@@ -98,8 +98,8 @@ const handleSaveEdit = () => {
 };
 
   return (
-    <Box sx={{ p: 4, maxWidth: 800, mx: 'auto' }}>
-      <Typography variant="h4" gutterBottom>Muokkaa tehtäväsettejä</Typography>
+    <Box sx={{ p: 4, maxWidth: 800, mx: 'auto', textAlign: 'center' }}>
+      <Typography variant="h4" gutterBottom>Muokkaa tehtäviä</Typography>
 
       <Paper sx={{ p: 3, mb: 4, backgroundColor: theme.palette.background.paper }}>
         <Typography variant="h6" gutterBottom>Tehtävä setit</Typography>

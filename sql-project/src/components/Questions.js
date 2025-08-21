@@ -305,9 +305,11 @@ function Questions() {
               backgroundColor: theme.palette.action.hover,
             },
           })}
+          variant="outlined"
+          size="large"
           onClick={() => setSelectedTestSet(null)}
         >
-          &larr; Takaisin testivalikkoon
+          Takaisin testivalikkoon
         </Button>
       </Box>
     );
@@ -461,8 +463,10 @@ function Questions() {
               backgroundColor: theme.palette.action.hover,
             },
           })}
+          variant="outlined"
+          size="large"
           onClick={() => setSelectedExercise(null)}>
-            &larr; Takaisin
+            Takaisin
           </Button>
         </motion.div>
       </motion.div>

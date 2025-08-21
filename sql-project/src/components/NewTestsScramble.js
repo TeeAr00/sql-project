@@ -74,7 +74,7 @@ function NewTestsScramble() {
   };
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ p: 4, textAlign: 'center' }}>
       <Typography variant="h4" gutterBottom>Sanajärjestely-tehtävän luonti</Typography>
       <Paper sx={{ p: 3, mb: 3 }}>
         <TextField

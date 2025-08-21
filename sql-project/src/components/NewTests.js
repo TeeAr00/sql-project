@@ -118,7 +118,7 @@ function NewTests() {
   };
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ p: 4, textAlign: 'center' }}>
       <Typography variant="h4" gutterBottom sx={{ color: (theme) => theme.palette.text.primary }}>Testisetin luonti</Typography>
       <TextField
         label="Testisetin nimi"
