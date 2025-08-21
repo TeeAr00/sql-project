@@ -18,6 +18,9 @@ import EditTestSets from './EditTestSets';
 import Scores from './Scores';
 import SandboxTests from './SandboxTests';
 import Exercises2 from './Exercises2';
+import CreateTests from './CreateTests';
+import NewTestsScramble from './NewTestsScramble';
+
 
 //Databasen testaukseen + roolin varmennuksen testaus
 function HomePage() {
@@ -173,6 +176,26 @@ function App() {
             <Auth>
               <MainLayout>
                 <SandboxTests />
+              </MainLayout>
+            </Auth>
+          }
+        />
+        <Route
+          path="/createTests"
+          element={
+            <Auth>
+              <MainLayout>
+                <CreateTests />
+              </MainLayout>
+            </Auth>
+          }
+        />
+        <Route
+          path="/newTestsScramble"
+          element={
+            <Auth>
+              <MainLayout>
+                <NewTestsScramble />
               </MainLayout>
             </Auth>
           }

@@ -38,7 +38,7 @@ function SideBar() {
     { text: 'Tehtävät 2', path: '/exercises2' },
     { text: 'Tulokset', path: '/scores' },
     ...(isAdmin ? [
-    { text: 'Uusi tehtäväsetti', path: '/newTests' },
+    { text: 'Luo tehtäviä', path: '/createTests' },
     { text: 'Muokkaa tehtäväsettejä', path: '/editSets' },
   ] : []),
   ];

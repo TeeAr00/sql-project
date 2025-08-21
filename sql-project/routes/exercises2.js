@@ -111,5 +111,23 @@ module.exports = (db) => {
     }
   });
 
+  //sanajärjestelykysymyksen luonti
+  router.post('/', authenticateToken, isAdmin, async (req, res) => {
+    const { description, expected_query, hint, word_bank } = req.body;
+    if (!description || !expected_query || !Array.isArray(word_bank)) {
+      return res.status(400).json({ error: "Puuttuvat kentät" });
+    }
+    try {
+      const [result] = await db.promise().query(
+        "INSERT INTO exercises2 (description, expected_query, hint, word_bank) VALUES (?, ?, ?, ?)",
+        [description, expected_query, hint || '', JSON.stringify(word_bank)]
+      );
+      res.json({ id: result.insertId });
+    } catch (err) {
+      console.error("Virhe tallennuksessa:", err);
+      res.status(500).json({ error: "Tietokanta virhe" });
+    }
+  });
+
   return router;
 };
