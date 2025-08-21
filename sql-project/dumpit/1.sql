@@ -38,8 +38,36 @@ CREATE TABLE `exercises` (
 
 LOCK TABLES `exercises` WRITE;
 /*!40000 ALTER TABLE `exercises` DISABLE KEYS */;
-INSERT INTO `exercises` VALUES (1,'Hae 5 ensimmäistä riviä taulusta \"person\".','SELECT * FROM person LIMIT 5;','valitse mistä, mitä, montako',1),(2,'Hae kaikki rivit taulusta \"person\".','SELECT * FROM person;','valitse mitä, mistä',1),(5,'Hae etu- ja sukunimi taulusta \"person\".','SELECT firstname, lastname FROM person;','valitse mitä, mistä',1),(6,'Hae ihmiset joiden tuntipalkka on yli 40','SELECT * FROM person WHERE salary > 40;','valitse mitä, mistä, rajaus',2),(7,'Hae projektit jotka ovat paikassa Turku tai Kuopio','SELECT * FROM project WHERE place IN (\"TURKU\", \"KUOPIO\");','valitse mistä, mitä, rajaus',2),(8,'Hae henkilöt joiden etunimi alkaa kirjaimella \"L\"','SELECT * FROM person WHERE firstname LIKE \"L%\";','valitse mistä, mitä, rajaus',2),(9,'Tulosta henkilöt palkan mukaan alenevassa järjestyksessä.','SELECT * FROM person ORDER BY salary DESC;','valitse mistä, miten',3),(10,'Hae 3 nuorinta henkilöä palkan mukaan alenevassa järjestyksessä','SELECT * FROM person ORDER BY birth_year ASC LIMIT 3;','valitse mistä, miten',3),(11,'Hae henkilön etu- ja sukunimi taulusta \"person\" sekä hänen työtunnit taulusta \"hour\"','SELECT person.firstname, person.lastname, hour.work_hour FROM person JOIN hour ON person.id_person = hour.id_person;','valitse mistä, mitä, miten yhdistetään',4),(12,'Laske rivien määrä taulusta \"person\"','SELECT COUNT(*) FROM person;','valitse miten ,mistä',5),(13,'Laske monessako projektissa työntekijä on ollut mukana.','SELECT id_person, COUNT(*) FROM hour GROUP BY id_person;',NULL,5),(14,'Hae projektit joissa on yli 2 työntekijää','Select id_project, COUNT(*) AS headcount FROM hour GROUP BY id_project HAVING COUNT(*) > 2;',NULL,5),(15,'Hae henkilöt, joiden palkka on suurempi kuin kaikkien keskipalkka.','SELECT * FROM person WHERE salary > (SELECT AVG(salary) FROM person);',NULL,6),(16,'testi','testi kysely','testataan',1),(17,'testi2','testi2','testi2',1),(18,'testi3','testi3','testi3',2),(19,'testi3','testi3','testi3',6),(20,'testi3','testi3','testi3',2),(21,'testi3','testi3','testi3',2),(22,'testi3','testi3','testi3',2),(23,'testi3','testi3','testi3',1),(24,'testi3','testi3','testi3',1),(25,'testi4','testi4','testi4',2),(26,'2','2','2',2),(27,'testi22','testi22','testi22',3),(28,'testi44','testi44','testi44',4),(29,'testi444','testi444','testi444',6),(30,'ds','ds','ds',2),(31,'de','de','de',2),(32,'1','1','1',1),(33,'2','2','2',2),(34,'3','3','3',3),(35,'4','4','4',4),(36,'SELECT * FROM person LIMIT 5;','select * FROM person LIMIT 5;','valitse, mistä, mitä, montako',1),(37,'SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;',2),(38,'SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;',3),(39,'SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;',5),(40,'testataan','testiin','tämä on vihje',2);
+INSERT INTO `exercises` VALUES (1,'Hae 5 ensimmäistä riviä taulusta \"person\".','SELECT * FROM person LIMIT 5;','valitse mistä, mitä, montako',1),(2,'Hae kaikki rivit taulusta \"person\".','SELECT * FROM person;','valitse mitä, mistä',1),(5,'Hae etu- ja sukunimi taulusta \"person\".','SELECT firstname, lastname FROM person;','valitse mitä, mistä',1),(6,'Hae ihmiset joiden tuntipalkka on yli 40','SELECT * FROM person WHERE salary > 40;','valitse mitä, mistä, rajaus',2),(7,'Hae projektit jotka ovat paikassa Turku tai Kuopio','SELECT * FROM project WHERE place IN (\"TURKU\", \"KUOPIO\");','valitse mistä, mitä, rajaus',2),(8,'Hae henkilöt joiden etunimi alkaa kirjaimella \"L\"','SELECT * FROM person WHERE firstname LIKE \"L%\";','valitse mistä, mitä, rajaus',2),(9,'Tulosta henkilöt palkan mukaan alenevassa järjestyksessä.','SELECT * FROM person ORDER BY salary DESC;','valitse mistä, miten',3),(10,'Hae 3 nuorinta henkilöä','SELECT * FROM person ORDER BY birth_year ASC LIMIT 3;','valitse mistä, miten',3),(11,'Hae henkilön etu- ja sukunimi taulusta \"person\" sekä hänen työtunnit taulusta \"hour\"','SELECT person.firstname, person.lastname, hour.work_hour FROM person JOIN hour ON person.id_person = hour.id_person;','valitse mistä, mitä, miten yhdistetään',4),(12,'Laske rivien määrä taulusta \"person\"','SELECT COUNT(*) FROM person;','valitse miten ,mistä',5),(13,'Laske monessako projektissa työntekijä on ollut mukana.','SELECT id_person, COUNT(*) FROM hour GROUP BY id_person;',NULL,5),(14,'Hae projektit joissa on yli 2 työntekijää','Select id_project, COUNT(*) AS headcount FROM hour GROUP BY id_project HAVING COUNT(*) > 2;',NULL,5),(15,'Hae henkilöt, joiden palkka on suurempi kuin kaikkien keskipalkka.','SELECT * FROM person WHERE salary > (SELECT AVG(salary) FROM person);',NULL,6),(36,'SELECT * FROM person LIMIT 5;','select * FROM person LIMIT 5;','valitse, mistä, mitä, montako',1),(37,'SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;',2),(38,'SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;',3),(39,'SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;','SELECT * FROM person LIMIT 5;',5);
 /*!40000 ALTER TABLE `exercises` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `exercises2`
+--
+
+DROP TABLE IF EXISTS `exercises2`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `exercises2` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `description` text NOT NULL,
+  `expected_query` text NOT NULL,
+  `hint` text,
+  `class` smallint DEFAULT NULL,
+  `word_bank` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `exercises2`
+--
+
+LOCK TABLES `exercises2` WRITE;
+/*!40000 ALTER TABLE `exercises2` DISABLE KEYS */;
+INSERT INTO `exercises2` VALUES (1,'Hae 5 ensimmäistä riviä taulusta \"person\"','SELECT * FROM person LIMIT 5;','',NULL,'SELECT ALL * FROM person persons FIRST 9 LIMIT 5 ; '),(2,'Hae kaikki henkilöt, jotka asuvat Helsingissä','SELECT * FROM person WHERE city = \"HELSINKI\";','Muista käyttää WHERE-ehtoa ja tarkka arvo lainausmerkeissä',NULL,'SELECT ALL FROM person WHERE city == \"HELSINKI\" \"TAMPERE\" = <> persons kaupunki HELSINKI * ;'),(3,'Hae kaikkien projektien nimet ja paikat taulusta project','SELECT pname, place FROM project;','Valitse vain kaksi saraketta: pname ja place',NULL,'SELECT pname , place city FROM project projects person hour AND'),(4,'Hae henkilön etunimi ja sukunimi, joka on syntynyt vuonna 1985','SELECT firstname, lastname FROM person WHERE birth_year = 1985;','WHERE rajaus syntymävuosi',NULL,'SELECT firstname , lastname birth_year = == 1985 \"1985\" salary FROM person hour vuosi WHERE ;'),(5,'Hae henkilöt joiden tuntipalkka on yli 38.','SELECT * FROM person WHERE salary > 38;','valitse mitä, mistä, rajaus',NULL,'[\"SELECT\",\"*\",\"palkka\",\"ALL\",\"COUNT(*)\",\"=>\",\"FROM\",\"person\",\"WHERE\",\"salary\",\">\",\"<\",\"=\",\"/\",\"38\",\";\"]');
+/*!40000 ALTER TABLE `exercises2` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -146,7 +174,7 @@ CREATE TABLE `test_set_exercises` (
 
 LOCK TABLES `test_set_exercises` WRITE;
 /*!40000 ALTER TABLE `test_set_exercises` DISABLE KEYS */;
-INSERT INTO `test_set_exercises` VALUES (1,1),(1,2),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(2,17),(6,36),(6,37),(6,38),(6,39);
+INSERT INTO `test_set_exercises` VALUES (1,1),(1,2),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(6,36),(6,37),(6,38),(6,39);
 /*!40000 ALTER TABLE `test_set_exercises` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,7 +198,7 @@ CREATE TABLE `test_sets` (
 
 LOCK TABLES `test_sets` WRITE;
 /*!40000 ALTER TABLE `test_sets` DISABLE KEYS */;
-INSERT INTO `test_sets` VALUES (1,'harjoitus_1'),(2,'turha'),(6,'debug');
+INSERT INTO `test_sets` VALUES (1,'harjoitus_1'),(6,'debug');
 /*!40000 ALTER TABLE `test_sets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -183,4 +211,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-14  8:31:52
+-- Dump completed on 2025-08-21 17:57:25
